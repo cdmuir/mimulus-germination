@@ -6,7 +6,7 @@ fit_surv <- readr::read_rds("r/objects/fit.rds")$draws(pars) %>%
   posterior::as_draws_df()
 
 # Calculate additive genetic variance posterior
-df_pop <- fit_surv %>%
+df_bPop <- fit_surv %>%
   dplyr::select(.draw, dplyr::starts_with("bPop")) %>%
   tidyr::pivot_longer(-.draw, names_to = "parameter") %>%
   dplyr::mutate(
@@ -19,15 +19,28 @@ df_pop <- fit_surv %>%
   tidyr::pivot_wider(names_from = "parameter",values_from = "value") %>%
   dplyr::ungroup(.draw)
 
-# need to adjust for pop-specific bCohortNorth_surv
-fit_surv %>%
-  dplyr::select(-dplyr::starts_with("bPop")) %>%
+df_bCohortNorth <- fit_surv %>%
+  dplyr::select(.draw, dplyr::starts_with("bCohortNorth")) %>%
+  tidyr::pivot_longer(-.draw, names_to = "parameter") %>%
+  dplyr::mutate(
+    pop = stringr::str_extract(parameter, "[0-9]{1,2}"),
+    pop = pop_levels()[as.numeric(pop)],
+    pop = factor(pop, pop_levels()),
+    parameter = "bCohortNorth_surv"
+  ) %>%
+  dplyr::group_by(.draw) %>%
+  tidyr::pivot_wider(names_from = "parameter",values_from = "value") %>%
+  dplyr::ungroup(.draw)
+
+fit_surv_qg <- fit_surv %>%
+  dplyr::select(.draw, `tauGeno_surv[1]`, `tauGeno_surv[2]`, sBlock_surv) %>%
   dplyr::mutate(
     va_south = 4 * `tauGeno_surv[1]` ^ 2,
     va_north = 4 * `tauGeno_surv[2]` ^ 2,
     vblock = sBlock_surv ^ 2
   ) %>%
-  dplyr::full_join(df_pop, by = ".draw") %>%
+  dplyr::full_join(df_bPop, by = ".draw") %>%
+  dplyr::full_join(df_bCohortNorth, by = c(".draw", "pop")) %>%
   dplyr::select(bPop_surv, bCohortNorth_surv, va_south, va_north, vblock, pop,
                 .draw) %>%
   purrr::pmap_dfr(~ {
@@ -62,13 +75,13 @@ fit_surv %>%
   })
 
 # Table summarizing variance components
-vc_table_surv <- fit_surv %>%
+vc_table_surv <- fit_surv_qg %>%
   dplyr::mutate(
     vres_south = var.obs.south - var.a.obs.south - var.block.obs.south,
     vres_north = var.obs.north - var.a.obs.north - var.block.obs.north,
   ) %>%
   dplyr::select(
-    .iter, 
+    .draw, 
     pop,
     va_south = var.a.obs.south,
     va_north = var.a.obs.north,
@@ -79,7 +92,7 @@ vc_table_surv <- fit_surv %>%
     h2_south = h2.obs.south,
     h2_north = h2.obs.north
   ) %>%
-  tidyr::gather(parameter, value, -pop, -.iter) %>%
+  tidyr::pivot_longer(-c(pop, .draw), names_to = "parameter") %>%
   dplyr::mutate(
     garden = stringr::str_replace(parameter, 
                                   "^([:alnum:]+)_(south|north)$", "\\2"),
@@ -87,32 +100,17 @@ vc_table_surv <- fit_surv %>%
                                   "^([:alnum:]+)_(south|north)$", "\\1"),
   ) %>%
   assign("df", ., pos = 1) %>%
-  dplyr::group_by(.iter, pop, garden) %>%
-  tidyr::spread(parameter, value) %>%
-  dplyr::group_by(pop, garden) %>%
-  tidybayes::point_interval(va, vblock, vres, h2, 
-                            .interval = tidybayes::hdci) %>%
-  dplyr::select_at(dplyr::vars(-dplyr::starts_with("."))) %>%
-  tidyr::gather(key, value, -pop, -garden) %>%
-  dplyr::mutate(
-    parameter = stringr::str_replace(key, "^([:alnum:]+).*[a-z]*$", "\\1"),
-    type = stringr::str_replace(key, "^[:alnum:]+[.]*([a-z]*)$", "\\1"),
-    type = ifelse(nchar(type) == 0L, "point", type)
-  ) %>%
-  dplyr::select(-key) %>%
-  dplyr::group_by(pop, garden) %>%
-  tidyr::spread(type, value) %>%
-  dplyr::ungroup() %>%
-  dplyr::mutate_if(is.numeric, signif, digits = 3) %>%
+  dplyr::group_by(pop, garden, parameter) %>%
+  tidybayes::point_interval(.point = median, .interval = tidybayes::qi) %>%
+  dplyr::mutate(dplyr::across(value:.upper, signif, digits = 3)) %>%
   dplyr::mutate(
     Population = factor(pop, levels = pop_levels()),
     Garden = stringr::str_to_sentence(garden),
-    `Median (95% HDI)` = glue::glue("{point} ({lower}--{upper})",
-                                    point = point, lower = lower, upper = upper),
+    `Median (95% CI)` = glue::glue("{value} ({.lower}--{.upper})"),
     Parameter = factor(parameter, levels = c("va", "vblock", "vres", "h2"))
   ) %>%
   dplyr::mutate(
-    `Median (95% HDI)` = stringr::str_replace_all(`Median (95% HDI)`, 
+    `Median (95% CI)` = stringr::str_replace_all(`Median (95% CI)`, 
                                                   "([0-9].[0-9]{2})e-0([0-9])",
                                                   "$\\1 \times 10^{-\\2}$")
   ) %>%
@@ -125,7 +123,7 @@ vc_table_surv <- fit_surv %>%
       parameter == "h2" ~ "$h^2$"
     )
   ) %>%
-  dplyr::select(Population, Garden, Parameter, `Median (95% HDI)`)
+  dplyr::select(Population, Garden, Parameter, `Median (95% CI)`)
 
 # Figure summarizing variance components
 df %<>% 
