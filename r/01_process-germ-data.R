@@ -16,10 +16,8 @@ data = readr::read_csv(
     MainBlock = readr::col_character(),
     InitialSize = readr::col_double(),
     WinterSurv = readr::col_character())
-)
-
-message("what's going on with NAs? are any missing data?")
-summary(data)
+) %>%
+  dplyr::mutate(DaysToGerm = as.integer(GermDate - SowDate))
 
 # Identify subcohorts and sow dates -----
 sow_dates_north = data %>% 
@@ -46,10 +44,9 @@ readr::write_rds(sow_dates, "r/objects/sow_dates.rds")
 export2ms("data")
 
 # Remove DaysToGerm < 5 (these are most likely weeds rather than monkeyflowers)
+# This also removes NAs
 nRemove = length(which(data$DaysToGerm < 5L))
-data = data %>%
-  dplyr::mutate(DaysToGerm = as.integer(GermDate - SowDate)) %>%
-  dplyr::filter(DaysToGerm >= 5L)
+data = dplyr::filter(data, DaysToGerm >= 5L)
 
 # Save modified data -----
 readr::write_rds(data, "processed-data/germination.rds")

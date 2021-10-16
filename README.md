@@ -1,9 +1,9 @@
-# card-emergence
+# mimulus-germination
 Are phenotypic clines adaptive?
 
-This project was developed by [Chris Muir](www.chrisdmuir.com) and [Amy Angert](http://angert.botany.ubc.ca/). [Courtney van den Elzen](https://www.colorado.edu/lab/emery/courtney-van-den-elzen) helped with data collection.
+This project was developed by [Chris Muir](https://cdmuir.netlify.app) and [Amy Angert](https://www.botany.ubc.ca/people/amy-angert/). [Courtney van den Elzen](https://www.colorado.edu/lab/emery/courtney-van-den-elzen) helped with data collection.
 
-More information about the study is available in a preprint which you can find on [biorxiv](https://doi.org/10.1101/######) or on [github](https://github.com/cdmuir/card-cline/blob/master/ms/ms.pdf).
+More information about the study is available in a preprint which you can find on [biorxiv](https://doi.org/10.1101/######) or on [github](https://github.com/cdmuir/mimulus-germination/blob/master/ms/ms.pdf).
 
 ## Instructions to reproduce manuscript using RStudio
 
@@ -12,10 +12,10 @@ While you can run the source code for this manuscript through any R interface, I
 1. Download or clone this repository to your machine. To clone from the Terminal:
 
 ```
-git clone git@github.com:cdmuir/card-emergence.git
+git clone git@github.com:cdmuir/mimulus-germination.git
 ```
 
-2. Open `card-emergence.Rproj` in [RStudio](https://www.rstudio.com/)
+2. Open `mimulus-germination.Rproj` in [RStudio](https://www.rstudio.com/)
 
 ``` {r}
 source("r/install-packages.R")

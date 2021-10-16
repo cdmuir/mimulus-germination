@@ -197,7 +197,7 @@ ggplot(df_pop_lines,
   ) +
   scale_fill_manual(values = c("grey", "white")) +
   xlab("Days to Germination") +
-  ylab("Winter Survivorship") +
+  ylab("Winter Survival") +
   guides(color = guide_legend(keyheight = 3)) +
   theme_bw() +
   theme(
@@ -212,36 +212,44 @@ ggsave("ms/figures/selection.pdf", width = 6.5, height = 5, units = "in")
 
 
 # Table - should be combined with genotypic results ----
-df_pop_lm %>%
+df_pop_lm %<>%
   dplyr::group_by(garden) %>%
+  tidyr::pivot_longer(c(-.draw, -garden), names_to = "parameter") %>%
+  dplyr::group_by(garden, parameter) %>%
   tidybayes::point_interval(
-    slope, intercept, 
-    width = 0.95, 
+    value, 
+    .width = 0.95, 
     .point = median,
     .interval = tidybayes::qi
-  )
+  ) %>%
+  dplyr::mutate(
+    dplyr::across(value:.upper, signif, 3),
+    Garden = dplyr::case_when(
+      garden == "north" ~ "North",
+      garden == "south" ~ "South"
+    ),
+  `Median (95% CI)` = glue::glue("{value} ({.lower} -- {.upper})"),
+  ) %>%
+  dplyr::select(Garden, Parameter = parameter, `Median (95% CI)`)
 
-df_ind_lm %>%
+df_ind_lm %<>%
   dplyr::group_by(garden) %>%
+  tidyr::pivot_longer(c(-.draw, -garden), names_to = "parameter") %>%
+  dplyr::group_by(garden, parameter) %>%
   tidybayes::point_interval(
-    slope, intercept, 
-    width = 0.95, 
+    value, 
+    .width = 0.95, 
     .point = median,
     .interval = tidybayes::qi
-  )
+  ) %>%
+  dplyr::mutate(
+    dplyr::across(value:.upper, signif, 3),
+    Garden = dplyr::case_when(
+      garden == "north" ~ "North",
+      garden == "south" ~ "South"
+    ),
+    `Median (95% CI)` = glue::glue("{value} ({.lower} -- {.upper})"),
+  ) %>%
+  dplyr::select(Garden, Parameter = parameter, `Median (95% CI)`)
 
-# these should be combined, but units are different
-ggplot(df_pop_lm, aes(slope)) +
-  geom_density()
-
-ggplot(df_ind_lm, aes(slope)) +
-  geom_density()
-
-# interesting plot showing significant negative relationship between breeding values
-tmp <- ind %>%
-  dplyr::group_by(pop, ind, garden) %>%
-  dplyr::summarise_at(dplyr::vars("bGeno_germ", "bGeno_surv"), median)
-
-ggplot(tmp, aes(bGeno_germ, bGeno_surv, color = garden)) +
-  geom_point()
-cor.test(tmp$bGeno_germ, tmp$bGeno_surv)
+export2ms(c("df_pop_lm", "df_ind_lm"))

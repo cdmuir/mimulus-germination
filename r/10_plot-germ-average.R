@@ -40,16 +40,20 @@ df_ind <- df %>%
   
 df_pop %<>% dplyr::mutate(DaysToGerm = 4 + exp(bPop_germ))
   
-ggplot(df_pop, aes(pop, DaysToGerm)) +
-  geom_violin(trim = FALSE, scale = "width", fill = "grey", adjust = 2,
-              draw_quantiles = 0.5) +
+mean_germ <- ggplot(df_pop, aes(pop, DaysToGerm, fill = pop)) +
+  geom_violin(trim = FALSE, scale = "width", adjust = 2, draw_quantiles = 0.5,
+              show.legend = FALSE) +
+  # geom_violin(trim = FALSE, scale = "width", fill = "grey", adjust = 2,
+              # draw_quantiles = 0.5) +
   # stat_summary(fun.y = median, fun.ymin = median, fun.ymax = median, 
   #              geom = "tile", size = 1, height = 0.05, width = 0.5,
   #              fill = "grey50") +
-  geom_point(data = df_ind, position = position_jitter(width = 0.1, height = 0)) + 
+  geom_point(data = df_ind, position = position_jitter(width = 0.1, height = 0),
+             show.legend = FALSE) + 
   scale_x_discrete(
     labels = pop_levels() %>% sapply(get_labels) %>% sapply(place_line_break)
   ) +
+  scale_fill_manual(values = palette()) +
   xlab("Population") +
   ylab("Days to Germination") +
   theme_bw() +
@@ -62,4 +66,6 @@ ggplot(df_pop, aes(pop, DaysToGerm)) +
     strip.text = element_text(size = 12)
   )
 
-ggsave("ms/figures/mean-germ.pdf", width = 5, height = 5, units = "in")
+readr::write_rds(mean_germ, "r/objects/mean_germ.rds")
+
+# ggsave("ms/figures/mean-germ.pdf", width = 5, height = 5, units = "in")

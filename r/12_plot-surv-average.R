@@ -64,20 +64,21 @@ df_pop <- df_bPop %>%
   dplyr::mutate(p_surv = plogis(bPop_surv + 
                                   (garden == "north") * bCohortNorth_surv))
 
-ggplot(df_pop, aes(pop, p_surv, fill = garden)) +
+mean_surv <- ggplot(df_pop, aes(pop, p_surv, linetype = garden, fill = pop)) +
   geom_violin(trim = FALSE, scale = "width", adjust = 2, draw_quantiles = 0.5) +
   geom_point(data = df_ind, 
              position = position_jitterdodge(
                jitter.width = 0.5, 
                jitter.height = 0, 
-               dodge.width = 0.9)
+               dodge.width = 0.9),
+             show.legend = FALSE
              ) + 
   scale_x_discrete(
     labels = pop_levels() %>% sapply(get_labels) %>% sapply(place_line_break)
   ) +
-  scale_fill_manual(values = c("grey", "white")) +
+  scale_fill_manual(values = palette(), guide = "none") +
   xlab("Population") +
-  ylab("Winter Survivorship") +
+  ylab("Prob Winter Survival") +
   theme_bw() +
   theme(
     axis.text.x = element_text(size = 12, angle = 30, vjust = 0.75),
@@ -91,4 +92,7 @@ ggplot(df_pop, aes(pop, p_surv, fill = garden)) +
     strip.text = element_text(size = 12)
   )
 
-ggsave("ms/figures/mean-surv.pdf", width = 5, height = 5, units = "in")
+mean_germ <- readr::read_rds("r/objects/mean_germ.rds")
+
+plot_grid(mean_germ, mean_surv, ncol = 1, labels = "auto")
+ggsave("ms/figures/mean-traits.pdf", width = 5, height = 10, units = "in")

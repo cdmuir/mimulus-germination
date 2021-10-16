@@ -18,7 +18,10 @@ data = readr::read_csv(
     WinterSurv = readr::col_character())
 )
 
-message("just remove NAs right now for testing model. need to recheck.")
+# NAs result from:
+# - extra plant from SUB block not used
+# - accidental death
+# - early transplant shock
 data %<>% dplyr::filter(!is.na(WinterSurv))
 
 # Convert survival to integer

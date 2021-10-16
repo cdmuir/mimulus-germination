@@ -1140,8 +1140,8 @@ copy_large_object <- function(x, import = FALSE) {
     file.copy(from = stringr::str_c("r/objects/", x),
               to = object_path, overwrite = TRUE)
     
-    object <- read_rds(object_path)
-    write_rds(object, object_path, compress = "gz")
+    object <- readr::read_rds(object_path)
+    readr::write_rds(object, object_path, compress = "gz")
     invisible()
     
   }
@@ -1317,7 +1317,7 @@ import2ms <- function(path_export = getOption("path_export", "/export")) {
   files <- list.files(path, ".rds$")
   object_names <- stringr::str_replace(files, ".rds$", "")
   eval(parse(text = stringr::str_c(
-    object_names, " <- read_rds('", path, "/", files, "')")
+    object_names, " <- readr::read_rds('", path, "/", files, "')")
   ),
   envir = .GlobalEnv)
   

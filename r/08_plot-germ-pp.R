@@ -9,22 +9,21 @@ data <- readr::read_rds("r/objects/germ_stan.rds")
 
 y <- tibble::tibble(
   DaysToGerm = data$DaysToGerm,
-  pop = data$Pop_germ,
+  pop = factor(data$Pop_germ, levels = rev(pop_levels())),
   cohort = data$Cohort_germ
 ) %>%
   dplyr::group_by(pop, cohort, DaysToGerm) %>%
   dplyr::summarize(n = dplyr::n(), .groups = "drop")
 
 # Model predictions
-# fit <- bring_forward("fit_germ", "r/objects")
-fit <- readr::read_rds("r/objects/lognormal_0_1_0.rds")
+fit <- readr::read_rds("r/objects/fit.rds")
 
 # Not plotted but useful for checking
 df_expected <- tidyr::crossing(
   tidyr::nesting(
-    pop = factor(pop_levels(), levels = pop_levels()), 
-    mu = fit$summary("bPop_germ")$median,
-    sigma = fit$summary("sigma")$median
+    pop = factor(pop_levels(), levels = rev(pop_levels())), 
+    mu = rev(fit$summary("bPop_germ")$median),
+    sigma = rev(fit$summary("sigma")$median)
   ),
   cohort = c(0, 1),
   b_cohort = fit$summary("bCohortNorth_germ")$median,
@@ -67,11 +66,19 @@ yrep <- fit$draws("predict_germ") %>%
   tidybayes::point_interval(n, .width = 0.9, .interval = tidybayes::qi)
 
 # Plot
+
+pop_labels = pop_levels() %>% 
+  rev() %>% 
+  sapply(get_labels) %>% 
+  sapply(place_line_break)
+cohort_labels = c(`0` = "South cohort", `1` = "North cohort")
+
 gp <- ggplot(y, aes(DaysToGerm, n, fill = "Observations")) +
-  facet_grid(rows = vars(pop), cols = vars(cohort)) +
+  facet_grid(rows = vars(pop), cols = vars(cohort),
+             labeller = labeller(pop = pop_labels, cohort = cohort_labels)) +
   geom_col(color = "white") +
   geom_pointrange(
-    data = posterior::as_draws_df(yrep), 
+    data = yrep, 
     mapping = aes(DaysToGerm, n, ymin = .lower, ymax = .upper, 
                   color = "Posterior\npredictions"), show.legend = TRUE,
     size = 0.75
@@ -81,9 +88,7 @@ gp <- ggplot(y, aes(DaysToGerm, n, fill = "Observations")) +
   ggtitle(label = "Posterior Predictive Check") + #, subtitle = subtitle) +
   scale_fill_manual(name = NULL, values = "grey50") +
   scale_color_manual(name = NULL, values = "black") +
-  guides(
-    fill = guide_legend(override.aes = list(color = "grey50"))
-  ) +
+  guides(fill = guide_legend(override.aes = list(color = "grey50"))) +
   theme_cowplot() +
   theme(
     axis.title = element_text(size = 12),
@@ -95,5 +100,6 @@ gp <- ggplot(y, aes(DaysToGerm, n, fill = "Observations")) +
   )
 
 gp 
+
 ggplot2::ggsave("ms/figures/pp_check_germ.pdf", width = 6.5, height = 9, 
                 useDingbats = FALSE)
