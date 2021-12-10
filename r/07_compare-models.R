@@ -87,6 +87,3 @@ best_model = ifelse(
 file.copy("r/objects/lognormal_0_0_1.rds", "r/objects/fit.rds", overwrite = TRUE)
 cat("r/objects/fit.rds filter=lfs diff=lfs merge=lfs -text\n",
     file = ".gitattributes", append = TRUE)
-
-# Note I moved table summarizing LOOIC to deprecated because I don't think it's
-# necessary any longer

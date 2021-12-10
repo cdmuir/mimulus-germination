@@ -8,49 +8,49 @@ fit_germ <- readr::read_rds("r/objects/fit.rds")$draws(pars) %>%
   dplyr::mutate(
     vpop = var(c(`bPop_germ[1]`, `bPop_germ[2]`, `bPop_germ[3]`, `bPop_germ[4]`, 
                  `bPop_germ[5]`)) * 4/5,
-    va = 4 * sGeno_germ ^ 2,
+    vg = 4 * sGeno_germ ^ 2,
     vblock = sBlock_germ ^ 2,
     vres = sigma ^ 2,
-    vp = va + vblock + vres,
-    h2 = va / vp
+    vp = vg + vblock + vres,
+    h2 = vg / vp
   ) %>%
   dplyr::ungroup()
 
 # Table summarizing variance components
 vc_table_germ <- fit_germ %>%
-  dplyr::select(vpop, va, vblock, vres, h2) %T>%
-  assign(x = "diff_vpop_va", envir = .GlobalEnv) %>%
+  dplyr::select(vpop, vg, vblock, vres, h2) %T>%
+  assign(x = "diff_vpop_vg", envir = .GlobalEnv) %>%
   tidyr::pivot_longer(tidyr::everything()) %>%
   dplyr::group_by(name) %>%
   tidybayes::point_interval(.point = median, .interval = tidybayes::qi) %>%
   dplyr::mutate(dplyr::across(value:.upper, signif, digits = 3)) %>%
   dplyr::mutate(
     `Median (95\\% CI)` = glue::glue("{value} ({.lower}--{.upper})"),
-    Parameter = factor(name, levels = c("vpop", "va", "vblock", "vres", "h2"))
+    Parameter = factor(name, levels = c("vpop", "vg", "vblock", "vres", "h2"))
   ) %>%
   dplyr::arrange(Parameter) %>%
   dplyr::mutate(
     Parameter = dplyr::case_when(
       name == "vpop" ~ "$V_\\text{pop}$",
-      name == "va" ~ "$V_\\text{A}$",
+      name == "vg" ~ "$V_\\text{G}$",
       name == "vblock" ~ "Block",
       name == "vres" ~ "$V_\\text{E}$",
-      name == "h2" ~ "$h^2$"
+      name == "h2" ~ "$H^2$"
     )
   ) %>%
   dplyr::select(Parameter, `Median (95\\% CI)`)
 
-# Difference between V_pop and V_A for ms
-diff_vpop_va_germ <- diff_vpop_va %>%
-  dplyr::transmute(diff_vpop_va = vpop - va) %>%
+# Difference between V_pop and V_G for ms
+diff_vpop_vg_germ <- diff_vpop_vg %>%
+  dplyr::transmute(diff_vpop_vg = vpop - vg) %>%
   tidybayes::point_interval(.point = median, .interval = tidybayes::qi) 
 
 # Figure summarizing variance components
 df <- fit_germ %>%
-  dplyr::select(vpop, va, vblock, vres, h2) %>%
+  dplyr::select(vpop, vg, vblock, vres, h2) %>%
   tidyr::pivot_longer(tidyr::everything(), names_to = "parameter") %>%
   dplyr::mutate(
-    parameter = factor(parameter, levels = c("vpop", "va", "vblock", "vres", "h2")),
+    parameter = factor(parameter, levels = c("vpop", "vg", "vblock", "vres", "h2")),
     type = dplyr::case_when(
       stringr::str_detect(parameter, "^v[a-z]+$") ~ "Variance components",
       stringr::str_detect(parameter, "^[hH]2$") ~ "Heritability"
@@ -75,7 +75,7 @@ gp1 <- ggplot(dplyr::filter(df, type == "Variance components"),
   stat_summary(fun = median, geom = "point", size = 3) +
   scale_x_discrete(labels = c(
     expression(italic(V)[pop]), 
-    expression(italic(V)[A]), 
+    expression(italic(V)[G]), 
     "Block", 
     expression(italic(V)[E])
   )) +
@@ -108,7 +108,7 @@ gp2 <- ggplot(dplyr::filter(df, type == "Heritability"),
     size = 1.2
   ) +
   stat_summary(fun = median, geom = "point", size = 3) +
-  scale_x_discrete(labels = expression(italic(h)^2)) +
+  scale_x_discrete(labels = expression(italic(H)^2)) +
   ylim(0, 1) +
   xlab(element_blank()) +
   ylab("Heritability") +
@@ -126,4 +126,4 @@ cowplot::plot_grid(gp1, gp2, nrow = 1, labels = "AUTO", align = "h",
 
 ggsave("ms/figures/h2-germ.pdf", width = 6.5, height = 4, units = "in")
 
-export2ms(c("vc_table_germ", "diff_vpop_va_germ"))
+export2ms(c("vc_table_germ", "diff_vpop_vg_germ"))

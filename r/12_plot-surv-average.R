@@ -78,7 +78,7 @@ mean_surv <- ggplot(df_pop, aes(pop, p_surv, linetype = garden, fill = pop)) +
   ) +
   scale_fill_manual(values = palette(), guide = "none") +
   xlab("Population") +
-  ylab("Prob Winter Survival") +
+  ylab("Winter Survival") +
   theme_bw() +
   theme(
     axis.text.x = element_text(size = 12, angle = 30, vjust = 0.75),

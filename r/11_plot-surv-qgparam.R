@@ -52,8 +52,8 @@ fit_surv_qg <- fit_surv %>%
                         `bPop_surv[3]` + `bCohortNorth_surv[3]`, 
                         `bPop_surv[4]` + `bCohortNorth_surv[4]`, 
                         `bPop_surv[5]` + `bCohortNorth_surv[5]`)),
-    va_south = 4 * `tauGeno_surv[1]` ^ 2,
-    va_north = 4 * `tauGeno_surv[2]` ^ 2,
+    vg_south = 4 * `tauGeno_surv[1]` ^ 2,
+    vg_north = 4 * `tauGeno_surv[2]` ^ 2,
     vblock = sBlock_surv ^ 2
   ) %>%
   dplyr::full_join(df_bPop, by = ".draw") %>%
@@ -61,8 +61,8 @@ fit_surv_qg <- fit_surv %>%
   dplyr::select(
     bPop_surv, # ..1
     bCohortNorth_surv, # ..2
-    va_south, # ..3
-    va_north, # ..4
+    vg_south, # ..3
+    vg_north, # ..4
     vblock, # ..5
     mpop_south, # ..6
     mpop_north, # ..7
@@ -101,8 +101,8 @@ fit_surv_qg <- fit_surv %>%
     
     qg$bPop_surv <- ..1
     qg$bCohortNorth_surv <- ..2
-    qg$va_south <- ..3
-    qg$va_north <- ..4
+    qg$vg_south <- ..3
+    qg$vg_north <- ..4
     qg$vp_south <- ..3 + ..5
     qg$vp_north <- ..3 + ..5
     qg$vpop_south <- ..8
@@ -122,8 +122,8 @@ vc_table_surv <- fit_surv_qg %>%
   dplyr::select(
     .draw, 
     pop,
-    va_south = var.a.obs.south,
-    va_north = var.a.obs.north,
+    vg_south = var.a.obs.south,
+    vg_north = var.a.obs.north,
     vblock_south = var.block.obs.south,
     vblock_north = var.block.obs.north,
     vpop_south = var.pop.obs.south,
@@ -149,21 +149,21 @@ vc_table_surv <- fit_surv_qg %>%
     Population = factor(pop, levels = pop_levels()),
     Garden = stringr::str_to_sentence(garden),
     `Median (95% CI)` = glue::glue("{value} ({.lower}--{.upper})"),
-    Parameter = factor(parameter, levels = c("va", "vblock", "vres", "h2"))
+    Parameter = factor(parameter, levels = c("vg", "vblock", "vres", "h2"))
   ) %>%
   dplyr::mutate(
     `Median (95% CI)` = stringr::str_replace_all(`Median (95% CI)`, 
                                                   "([0-9].[0-9]{2})e-0([0-9])",
-                                                  "$\\1 \\times 10^{-\\2}$")
+                                                  "$\\1 \\\\times 10^{-\\2}$")
   ) %>%
   dplyr::arrange(Parameter, Population, Garden) %>%
   dplyr::mutate(
     Parameter = dplyr::case_when(
       parameter == "vpop" ~ "$V_\\text{pop}$",
-      parameter == "va" ~ "$V_\\text{A}$",
+      parameter == "vg" ~ "$V_\\text{G}$",
       parameter == "vblock" ~ "Block",
       parameter == "vres" ~ "$V_\\text{E}$",
-      parameter == "h2" ~ "$h^2$"
+      parameter == "h2" ~ "$H^2$"
     )
   ) %>%
   dplyr::select(Population, Garden, Parameter, `Median (95% CI)`) %>%
@@ -176,9 +176,9 @@ vc_table_surv <- fit_surv_qg %>%
     Population == "RCK" ~ "Rock Creek"
   ))
 
-# Difference between V_pop and V_A for ms
-# diff_vpop_va_surv <- diff_vpop_va %>%
-#   dplyr::transmute(diff_vpop_va = vpop - va) %>%
+# Difference between V_pop and V_G for ms
+# diff_vpop_vg_surv <- diff_vpop_vg %>%
+#   dplyr::transmute(diff_vpop_vg = vpop - vg) %>%
 #   tidybayes::point_interval(.point = median, .interval = tidybayes::qi) 
 
 # Figure summarizing variance components
@@ -188,12 +188,12 @@ df %<>%
                     levels = c("South", "North")),
     par = factor(dplyr::case_when(
       parameter == "vpop" ~ "italic(V)[pop]",
-      parameter == "va" ~ "italic(V)[A]",
+      parameter == "vg" ~ "italic(V)[G]",
       parameter == "vblock" ~ "Block", 
       parameter == "vres" ~ "italic(V)[E]", 
-      parameter == "h2" ~ "italic(h) ^ 2"
-    ), levels = c("Block", "italic(V)[E]", "italic(V)[A]",
-                  "italic(h) ^ 2", "italic(V)[pop]"))
+      parameter == "h2" ~ "italic(H) ^ 2"
+    ), levels = c("Block", "italic(V)[E]", "italic(V)[G]",
+                  "italic(H) ^ 2", "italic(V)[pop]"))
   )
 
 df_summary <- df %>%

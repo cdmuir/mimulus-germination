@@ -99,7 +99,5 @@ gp <- ggplot(y, aes(DaysToGerm, n, fill = "Observations")) +
     panel.grid = element_blank()
   )
 
-gp 
-
 ggplot2::ggsave("ms/figures/pp_check_germ.pdf", width = 6.5, height = 9, 
                 useDingbats = FALSE)

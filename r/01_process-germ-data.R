@@ -43,7 +43,7 @@ readr::write_rds(sow_dates, "r/objects/sow_dates.rds")
 # Modify data -----
 export2ms("data")
 
-# Remove DaysToGerm < 5 (these are most likely weeds rather than monkeyflowers)
+# Remove DaysToGerm < 5 (these are weeds rather than monkeyflowers)
 # This also removes NAs
 nRemove = length(which(data$DaysToGerm < 5L))
 data = dplyr::filter(data, DaysToGerm >= 5L)

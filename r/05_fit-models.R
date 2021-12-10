@@ -37,8 +37,8 @@ models = c(
   "lognormal_0_1_1"
 )
 
-# for (i in seq_along(models)) {
-i = 3
+for (i in seq_along(models)) {
+
   mod = cmdstan_model(glue::glue("stan/{stem}.stan", stem = models[i]))
   
   fit = mod$sample(
