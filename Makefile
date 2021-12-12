@@ -53,7 +53,7 @@ ms/figures/h2-germ.pdf: r/objects/fit.rds r/functions.R r/header.R r/09_plot-ger
 	Rscript -e 'source("r/09_plot-germ-qgparam.R")'
 ms/export/vc_table_germ.rds: r/objects/fit.rds r/functions.R r/header.R r/09_plot-germ-qgparam.R
 	Rscript -e 'source("r/09_plot-germ-qgparam.R")'
-ms/export/diff_vpop_vg_germ: r/objects/fit.rds r/functions.R r/header.R r/09_plot-germ-qgparam.R
+ms/export/diff_vpop_vg_germ.rds: r/objects/fit.rds r/functions.R r/header.R r/09_plot-germ-qgparam.R
 	Rscript -e 'source("r/09_plot-germ-qgparam.R")'
 
 # 10_plot-germ-average.R ----
