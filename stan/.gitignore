@@ -1,1 +1,5 @@
-lognormal_*
+lognormal_0
+lognormal_0.stan
+lognormal_1
+lognormal_1.stan
+deprecated/*.stan
