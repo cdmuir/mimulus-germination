@@ -4,7 +4,7 @@ R_OPTS=--no-save --no-restore --no-init-file --no-site-file
 all: data model paper
 data: processed-data/germination.rds 
 model: r/objects/fit.rds
-paper: ms/ms.pdf ms/si.pdf ms/export/data.rds ms/export/df_ind_lm.rds ms/export/ms_pop_lm.rds ms/export/diff_vpop_vg_germ.rds ms/export/nRemove.rds ms/export/vc_table_germ.rds ms/export/vc_table_surv.rds ms/export/diff_vpop_va_germ.rds ms/figures/climate.pdf ms/figures/h2-germ.pdf ms/figures/h2-surv.pdf ms/figures/mean-traits.pdf ms/figures/pp_check_germ.pdf ms/figures/selection.pdf
+paper: ms/ms.pdf ms/si.pdf ms/export/data.rds ms/export/df_ind_lm.rds ms/export/df_pop_lm.rds ms/export/diff_vpop_vg_germ.rds ms/export/nRemove.rds ms/export/vc_table_germ.rds ms/export/vc_table_surv.rds ms/export/diff_vpop_vg_germ.rds ms/figures/climate.pdf ms/figures/h2-germ.pdf ms/figures/h2-surv.pdf ms/figures/mean-traits.pdf ms/figures/pp_check_germ.pdf ms/figures/selection.pdf
 
 # 01_process-germ-data.R ----
 r/objects/sow_dates.rds: raw-data/germination.csv r/functions.R r/header.R r/01_process-germ-data.R
@@ -29,13 +29,9 @@ r/objects/surv_stan.rds: raw-data/germination.csv r/functions.R r/header.R r/03_
 # 04_write-models.R ----
 .gitattributes: r/04_write-models.R
 	Rscript -e 'source("r/04_write-models.R")'
-stan/lognormal_0_0.stan: processed-data/germination.rds r/objects/sow_dates.rds r/objects/census_dates.rds r/functions.R r/header.R r/04_write-models.R
+stan/lognormal_0.stan: processed-data/germination.rds r/objects/sow_dates.rds r/objects/census_dates.rds r/functions.R r/header.R r/04_write-models.R
 	Rscript -e 'source("r/04_write-models.R")'
-stan/lognormal_0_1.stan: processed-data/germination.rds r/objects/sow_dates.rds r/objects/census_dates.rds r/functions.R r/header.R r/04_write-models.R
-	Rscript -e 'source("r/04_write-models.R")'
-stan/lognormal_1_0.stan: processed-data/germination.rds r/objects/sow_dates.rds r/objects/census_dates.rds r/functions.R r/header.R r/04_write-models.R
-	Rscript -e 'source("r/04_write-models.R")'
-stan/lognormal_1_1.stan: processed-data/germination.rds r/objects/sow_dates.rds r/objects/census_dates.rds r/functions.R r/header.R r/04_write-models.R
+stan/lognormal_1.stan: processed-data/germination.rds r/objects/sow_dates.rds r/objects/census_dates.rds r/functions.R r/header.R r/04_write-models.R
 	Rscript -e 'source("r/04_write-models.R")'
 
 # 05_fit-models.R ----
@@ -45,7 +41,7 @@ r/objects/lognormal_1.rds: stan/lognormal_1.stan raw-data/seeds.txt r/objects/ge
 	Rscript -e 'source("r/05_fit-models.R")'
 
 # 06_compare-models.R ----
-r/objects/fit.rds: r/objects/lognormal_0_0.rds r/objects/lognormal_0_1.rds r/objects/lognormal_1_0.rds r/objects/lognormal_1_1.rds r/functions.R r/header.R r/06_compare-models.R
+r/objects/fit.rds: r/objects/lognormal_0.rds r/objects/lognormal_1.rds r/functions.R r/header.R r/06_compare-models.R
 	Rscript -e 'source("r/06_compare-models.R")'
 
 # 08_plot-germ-pp.R ----
@@ -87,9 +83,9 @@ ms/figures/climate.pdf: raw-data/climate_data.csv r/functions.R r/header.R r/14_
 	Rscript -e 'source("r/14_plot-climate.R")'
 
 # paper ----
-ms/ms.pdf: ms/ms.Rmd ms/mimulus-germination.bib ms/export/data.rds ms/export/df_ind_lm.rds ms/export/ms_pop_lm.rds ms/export/diff_vpop_vg_germ.rds ms/export/nRemove.rds ms/export/vc_table_germ.rds ms/export/vc_table_surv.rds ms/export/diff_vpop_va_germ.rds ms/figures/climate.pdf ms/figures/h2-germ.pdf ms/figures/h2-surv.pdf ms/figures/mean-traits.pdf ms/figures/pp_check_germ.pdf ms/figures/selection.pdf
+ms/ms.pdf: ms/ms.Rmd ms/mimulus-germination.bib ms/export/data.rds ms/export/df_ind_lm.rds ms/export/df_pop_lm.rds ms/export/diff_vpop_vg_germ.rds ms/export/nRemove.rds ms/export/vc_table_germ.rds ms/export/vc_table_surv.rds ms/export/diff_vpop_vg_germ.rds ms/figures/climate.pdf ms/figures/h2-germ.pdf ms/figures/h2-surv.pdf ms/figures/mean-traits.pdf ms/figures/pp_check_germ.pdf ms/figures/selection.pdf
 	Rscript -e 'rmarkdown::render("ms/ms.Rmd", output_format = "bookdown::pdf_document2", output_file = "ms.pdf")'
-ms/si.pdf: ms/si.Rmd ms/mimulus-germination.bib ms/export/data.rds ms/export/df_ind_lm.rds ms/export/ms_pop_lm.rds ms/export/diff_vpop_vg_germ.rds ms/export/nRemove.rds ms/export/vc_table_germ.rds ms/export/vc_table_surv.rds ms/export/diff_vpop_va_germ.rds ms/figures/climate.pdf ms/figures/h2-germ.pdf ms/figures/h2-surv.pdf ms/figures/mean-traits.pdf ms/figures/pp_check_germ.pdf ms/figures/selection.pdf
+ms/si.pdf: ms/si.Rmd ms/mimulus-germination.bib ms/export/data.rds ms/export/df_ind_lm.rds ms/export/df_pop_lm.rds ms/export/diff_vpop_vg_germ.rds ms/export/nRemove.rds ms/export/vc_table_germ.rds ms/export/vc_table_surv.rds ms/export/diff_vpop_vg_germ.rds ms/figures/climate.pdf ms/figures/h2-germ.pdf ms/figures/h2-surv.pdf ms/figures/mean-traits.pdf ms/figures/pp_check_germ.pdf ms/figures/selection.pdf
 	Rscript -e 'rmarkdown::render("ms/si.Rmd", output_format = "bookdown::pdf_document2", output_file = "si.pdf")'
 
 clean: 
