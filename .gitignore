@@ -1,10 +1,5 @@
 *DS_Store
-issues*
 Icon*
-large-objects/census_dates_0.rds
-large-objects/census_dates_1.rds
-large-objects/likelihoods_germ.rds
-large-objects/predictions_germ.rds
 # History files
 .Rhistory
 .Rapp.history
@@ -30,4 +25,3 @@ vignettes/*.pdf
 *.utf8.md
 *.knit.md
 .Rproj.user
-r - old
