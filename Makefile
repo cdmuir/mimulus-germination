@@ -92,5 +92,5 @@ clean:
 	\rm -f *~ *.Rout */*~ */*.Rout .RData Rplots.pdf
 	
 cleanall: 
-	\rm -f *.aux *.bbl *.blg *.log *.pdf *~ *.Rout */*~ */*.Rout ms/figures/*.pdf ms/ms.pdf ms/ms.tex ms/si.pdf ms/si.tex r/objects/*.rds processed-data/*.rds */*.aux */*.log 
+	\rm -f *.aux *.bbl *.blg *.log *.pdf *~ *.Rout */*~ */*.Rout ms/export/*.rds ms/figures/*.pdf ms/ms.pdf ms/ms.tex ms/si.pdf ms/si.tex r/objects/*.rds processed-data/*.rds */*.aux */*.log 
 
