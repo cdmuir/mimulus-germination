@@ -2,9 +2,7 @@ source("r/header.r")
 
 n_chain = 4
 
-init = readr::read_rds("r/objects/init.rds")
-
-seeds = read.table("r/objects/seeds.txt") %>%
+seeds = read.table("raw-data/seeds.txt") %>%
   dplyr::pull(V1)
 germ_stan = readr::read_rds("r/objects/germ_stan.rds")
 surv_stan = readr::read_rds("r/objects/surv_stan.rds")
@@ -30,12 +28,7 @@ data$ntd = rep(4, data$nPop_germ)
 # which(purrr::map_lgl(data, function(.x) any(is.na(.x))))
 
 # Fit models -----
-models = c(
-  "lognormal_0_0_0",
-  "lognormal_0_1_0",
-  "lognormal_0_0_1",
-  "lognormal_0_1_1"
-)
+models = c("lognormal_0", "lognormal_1")
 
 for (i in seq_along(models)) {
 

@@ -94,5 +94,6 @@ mean_surv <- ggplot(df_pop, aes(pop, p_surv, linetype = garden, fill = pop)) +
 
 mean_germ <- readr::read_rds("r/objects/mean_germ.rds")
 
-plot_grid(mean_germ, mean_surv, ncol = 1, labels = "auto")
-ggsave("ms/figures/mean-traits.pdf", width = 5, height = 10, units = "in")
+gp <- plot_grid(mean_germ, mean_surv, ncol = 1, labels = "auto")
+ggsave("ms/figures/mean-traits.pdf", plot = gp, width = 5, height = 10,
+       units = "in")

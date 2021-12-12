@@ -20,7 +20,7 @@ output:
 fontsize: 12pt
 linestretch: 1.5
 link-citations: yes
-csl: ../template/annals-of-botany.csl
+csl: ../template/american-journal-of-botany.csl
 bibliography: ../ms/mimulus-germination.bib
 ---
 

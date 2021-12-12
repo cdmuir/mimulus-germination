@@ -234,7 +234,7 @@ make_germ_data <- function(pop, sub_cohort, nonadd) {
   
 }
 
-##### Write Stan blocks for survival model ######################################
+##### Write Stan blocks for survival model #####################################
 
 # Function to create custom generated quantities blocks in Stan for each population
 make_surv_generated_quantities <- function(pop, start, nonadd, interaction) {
@@ -1178,20 +1178,6 @@ bring_forward <- function(what, where) {
   object 
   
 }
-
-# Get breeding value of each genotype from Stan posterior extract
-# THIS NEEDS TO BE FIXED
-# get_breeding_value <- function(x, mu, s, ntd) {
-#   
-#   ret <- data.frame(
-#     pop = stringr::str_replace(s, "^bGeno([A-Z]{3})\\[([0-9]{1,2})\\]$", "\\1"),
-#     id = stringr::str_replace(s, "^bGeno([A-Z]{3})\\[([0-9]{1,2})\\]$", "\\1\\2"),
-#     pheno = ntd + median(mu + x)
-#   )
-#   
-#   ret
-#   
-# }
 
 # Determine iterations and thinning for Stan
 make_stan_options <- function(nsamples, ncores, round = 0) {

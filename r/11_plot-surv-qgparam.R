@@ -205,7 +205,7 @@ df_summary <- df %>%
 
 df_summary[df_summary$par == "italic(V)[pop]", "pop"] <- "all"
 
-ggplot(df, aes(pop, value, color = pop)) +
+gp <- ggplot(df, aes(pop, value, color = pop)) +
   facet_grid(Garden ~ par, scales = "free_x", space = "free_x", 
              as.table = FALSE, labeller = label_parsed) +
   # geom_violin(trim = FALSE, scale = "width", adjust = 2) +
@@ -246,6 +246,7 @@ ggplot(df, aes(pop, value, color = pop)) +
     strip.text = element_text(size = 12)
   )
 
-ggsave("ms/figures/h2-surv.pdf", width = 7.5, height = 7.5, units = "in")
+ggsave("ms/figures/h2-surv.pdf", plot = gp, width = 7.5, height = 7.5, 
+       units = "in")
 
 export2ms("vc_table_surv")

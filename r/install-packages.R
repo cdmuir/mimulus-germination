@@ -1,18 +1,31 @@
+install.packages("base64enc")
 install.packages("bayesplot")
+install.packages("bookdown")
 install.packages("cmdstanr", repos = c("https://mc-stan.org/r-packages/", getOption("repos")))
+# Getting started with cmdstanr: 
+# https://mc-stan.org/cmdstanr/articles/cmdstanr.html
+# install_cmdstan(cores = 2) # install cmdstan if necessary
+# set_cmdstan_path(PATH_TO_CMDSTAN) # set cmdstan path if already installed
+# cmdstan_path() # locate cmdstan path
 install.packages("cowplot")
 install.packages("crayon")
 install.packages("dplyr")
 install.packages("ggplot2")
 install.packages("glue")
+install.packages("htmltools")
 install.packages("knitr")
 install.packages("loo")
 install.packages("magrittr")
+install.packages("markdown")
+install.packages("mime")
 install.packages("parallel")
 install.packages("posterior")
 install.packages("purrr")
+install.packages("purrrlyr")
 install.packages("QGglmm")
 install.packages("random")
 install.packages("readr")
+install.packages("rmarkdown")
 install.packages("tidybayes")
 install.packages("tidyr")
+install.packages("tinytex")

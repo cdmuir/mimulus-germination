@@ -1,15 +1,43 @@
 # mimulus-germination
-Are phenotypic clines adaptive?
 
-This project was developed by [Chris Muir](https://cdmuir.netlify.app) and [Amy Angert](https://www.botany.ubc.ca/people/amy-angert/). [Courtney van den Elzen](https://www.colorado.edu/lab/emery/courtney-van-den-elzen) helped with data collection.
+This repository contains source code associated with the manuscript:
 
-More information about the study is available in a preprint which you can find on [biorxiv](https://doi.org/10.1101/######) or on [github](https://github.com/cdmuir/mimulus-germination/blob/master/ms/ms.pdf).
+[Selection on early survival does not explain germination rate clines in *Mimulus cardinalis* (Phrymaceae)](https://doi.org/10.1101/2021.12.XX.XXXXXX). *bioRxiv*.
 
-## Instructions to reproduce manuscript using RStudio
+This project was developed by [Chris Muir](https://cdmuir.netlify.app) and [Amy Angert](https://www.botany.ubc.ca/people/amy-angert/). [Courtney Van Den Elzen](https://www.colorado.edu/lab/emery/courtney-van-den-elzen) helped with data collection.
 
-While you can run the source code for this manuscript through any R interface, I strongly recommend using the [RStudio](https://www.rstudio.com/) project file included in this repository.
+## Contents
 
-1. Download or clone this repository to your machine. To clone from the Terminal:
+This repository has the following file folders:
+
+- `ms`: manuscript input (e.g. `ms.Rmd` and `mimulus-germination.bib`) and output (e.g. `ms.pdf` and `si.pdf`) files
+- `ms/figures`: figures generated from *R* code
+- `ms/objects`: saved objects generated from *R* code
+- `processed-data`: processed data generated from *R* code
+- `r`: *R* scripts for all data processing and analysis
+- `raw-data`: raw data files
+- `stan`: [*Stan*](https://mc-stan.org) code for statistical models
+- `template`: manuscript style files
+
+## Prerequisites:
+
+To run code and render manuscript:
+
+- [*R*](https://cran.r-project.org/) version >4.1.0 and [*RStudio*](https://www.rstudio.com/)
+- [LaTeX](https://www.latex-project.org/): you can install the full version or try [**tinytex**](https://yihui.org/tinytex/)
+- [GNU Make](https://www.gnu.org/software/make/): In terminal, you can just type `make paper` to render the manuscript. You can also use it to re-run all scripts.
+
+Before running scripts, you'll need to install the following *R* packages:
+
+```
+source("r/install-packages.R")
+```
+
+To fit *Stan* models, set up [**cmdstanr**](https://mc-stan.org/cmdstanr/).
+
+## Downloading data and code 
+
+1. Download or clone this repository to your machine.
 
 ```
 git clone git@github.com:cdmuir/mimulus-germination.git
@@ -17,24 +45,45 @@ git clone git@github.com:cdmuir/mimulus-germination.git
 
 2. Open `mimulus-germination.Rproj` in [RStudio](https://www.rstudio.com/)
 
-``` {r}
-source("r/install-packages.R")
+## Rendering manuscript
+
+### Software requirements
+
+At minimum, you will need [R](https://cran.r-project.org/) installed on your machine. Install additional packages by running `r/install-packages.R`.
+
+### Rendering manuscript with pre-saved outout
+
+Knit `ms/ms.Rmd` and `ms/si.Rmd` using [RStudio](https://www.rstudio.com/).
+
+You can also run the following code from the R console:
+
+```{r}
+# Main paper
+rmarkdown::render(
+  input = "ms/ms.Rmd",
+  output_dir = "ms"
+)
+
+# Supporting information
+rmarkdown::render(
+  input = "ms/si.Rmd",
+  output_dir = "ms"
+)
 ```
 
-3. Install R packages if necessary. Running "r/install-packages.R" will do this for you.
+or use `make`
 
-If you don't want to rerun analyses (slow) or refit Stan models (*very* slow), you are ready to generate the manuscript on your machine. If you want to rerun analyses or refit models, see instructions below.
+```
+make paper
+```
 
-## Generating manuscript
+### Generating all results
 
-Simply open `ms/ms.Rnw` and compile using RStudio.
+You can re-run all analyses, figures, etc. using [GNU make](https://www.gnu.org/software/make/). Type `make --version` in a terminal/shell to see if it is already installed.
 
-## Running analyses (slow)
-
-1. Open `r/run-all.R` to begin running scripts. 
-
-2. Import large objects (mostly posterior samples from Stan models). From the R Console, do:
-
-``` {r}
-source("r/00_import-large-objects.R") 
+```
+# Clear out previously saved output
+make cleanall
+# This will take a long time to run
+make
 ```

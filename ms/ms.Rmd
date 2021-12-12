@@ -69,11 +69,11 @@ fit <- read_rds("r/objects/fit.rds")
 
 **Methods** Here we used quantitative genetics and reciprocal transplants to test whether a previously discovered cline in germination rate showed additional signatures of adaptation in the scarlet monkeyflower (*Mimulus cardinalis*). We measured genotypic and population level covariation between germination rate and early survival, a component of fitness. We developed a novel discrete log-normal model to estimate genetic variance in germination rate.
 
-**Results** Contrary to our adapative hypothesis, we found no evidence that genetic variation in germination rate contributed to variation in early survival. Across populations, southern populations in both gardens germinated earlier and survived more. 
+**Results** Contrary to our adaptive hypothesis, we found no evidence that genetic variation in germination rate contributed to variation in early survival. Across populations, southern populations in both gardens germinated earlier and survived more. 
 
 **Conclusions** Southern populations have higher early survival but this is not caused by faster germination. This pattern is consistent with nonadaptive forces driving the phenotypic cline in germination rate, but future work will need to assess whether there is selection at other life stages. The statistical framework should help expand quantitative genetic analyses for other waiting-time traits.
 
-**Keywords:** cline, genotypic selection, germination, *Mimulus*, reciprocal transplant
+**Keywords:** cline; genotypic selection; germination; *Mimulus*; reciprocal transplant
 
 \newpage
 

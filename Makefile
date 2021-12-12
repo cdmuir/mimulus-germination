@@ -1,127 +1,104 @@
 # A good simple tutorial about Make can be found at http://kbroman.org/minimal_make/ 
 R_OPTS=--no-save --no-restore --no-init-file --no-site-file
-# sections copied from other project are commented out. modify and uncomment when readonly
-# all: data model paper
-# data: objects/pair_div.rds 
-# model: objects/fit.rds
-# paper: ms/ms.pdf figures/concepts.pdf figures/h1-raw.pdf figures/h1.pdf figures/h2.pdf
+
+all: data model paper
+data: processed-data/germination.rds 
+model: r/objects/fit.rds
+paper: ms/ms.pdf ms/si.pdf ms/export/data.rds ms/export/df_ind_lm.rds ms/export/ms_pop_lm.rds ms/export/diff_vpop_vg_germ.rds ms/export/nRemove.rds ms/export/vc_table_germ.rds ms/export/vc_table_surv.rds ms/export/diff_vpop_va_germ.rds ms/figures/climate.pdf ms/figures/h2-germ.pdf ms/figures/h2-surv.pdf ms/figures/mean-traits.pdf ms/figures/pp_check_germ.pdf ms/figures/selection.pdf
 
 # 01_process-germ-data.R ----
-r/objects/sow_dates.rds: raw-data/germination.csv r/01_process-germ-data.R
+r/objects/sow_dates.rds: raw-data/germination.csv r/functions.R r/header.R r/01_process-germ-data.R
 	Rscript -e 'source("r/01_process-germ-data.R")'
-
-processed-data/germination.rds: raw-data/germination.csv r/01_process-germ-data.R
+processed-data/germination.rds: raw-data/germination.csv r/functions.R r/header.R r/01_process-germ-data.R
 	Rscript -e 'source("r/01_process-germ-data.R")'
-
-r/objects/census_dates.rds: raw-data/germination.csv r/01_process-germ-data.R
+r/objects/census_dates.rds: raw-data/germination.csv r/functions.R r/header.R r/01_process-germ-data.R
+	Rscript -e 'source("r/01_process-germ-data.R")'
+ms/export/data.rds: raw-data/germination.csv r/functions.R r/header.R r/01_process-germ-data.R
+	Rscript -e 'source("r/01_process-germ-data.R")'
+ms/export/nRemove.rds: raw-data/germination.csv r/functions.R r/header.R r/01_process-germ-data.R
 	Rscript -e 'source("r/01_process-germ-data.R")'
 
 # 02_write-germ-stan.R ----
-r/objects/germ_stan.rds: r/objects/sow_dates.rds processed-data/germination.rds r/02_write-germ-stan.R
+r/objects/germ_stan.rds: r/objects/sow_dates.rds processed-data/germination.rds r/functions.R r/header.R r/02_write-germ-stan.R
 	Rscript -e 'source("r/02_write-germ-stan.R")'
 
 # 03_write-surv-stan.R ----
-r/objects/surv_stan.rds: raw-data/germination.csv r/03_write-surv-stan.R
+r/objects/surv_stan.rds: raw-data/germination.csv r/functions.R r/header.R r/03_write-surv-stan.R
 	Rscript -e 'source("r/03_write-surv-stan.R")'
 
 # 04_write-models.R ----
 .gitattributes: r/04_write-models.R
 	Rscript -e 'source("r/04_write-models.R")'
-stan/lognormal_0_0_0.stan: processed-data/germination.rds r/objects/sow_dates.rds r/objects/census_dates.rds r/04_write-models.R
+stan/lognormal_0_0.stan: processed-data/germination.rds r/objects/sow_dates.rds r/objects/census_dates.rds r/functions.R r/header.R r/04_write-models.R
 	Rscript -e 'source("r/04_write-models.R")'
-stan/lognormal_0_0_1.stan: processed-data/germination.rds r/objects/sow_dates.rds r/objects/census_dates.rds r/04_write-models.R
+stan/lognormal_0_1.stan: processed-data/germination.rds r/objects/sow_dates.rds r/objects/census_dates.rds r/functions.R r/header.R r/04_write-models.R
 	Rscript -e 'source("r/04_write-models.R")'
-stan/lognormal_0_1_0.stan: processed-data/germination.rds r/objects/sow_dates.rds r/objects/census_dates.rds r/04_write-models.R
+stan/lognormal_1_0.stan: processed-data/germination.rds r/objects/sow_dates.rds r/objects/census_dates.rds r/functions.R r/header.R r/04_write-models.R
 	Rscript -e 'source("r/04_write-models.R")'
-stan/lognormal_0_1_1.stan: processed-data/germination.rds r/objects/sow_dates.rds r/objects/census_dates.rds r/04_write-models.R
-	Rscript -e 'source("r/04_write-models.R")'
-stan/lognormal_1_0_0.stan: processed-data/germination.rds r/objects/sow_dates.rds r/objects/census_dates.rds r/04_write-models.R
-	Rscript -e 'source("r/04_write-models.R")'
-stan/lognormal_1_0_1.stan: processed-data/germination.rds r/objects/sow_dates.rds r/objects/census_dates.rds r/04_write-models.R
-	Rscript -e 'source("r/04_write-models.R")'
-stan/lognormal_1_1_0.stan: processed-data/germination.rds r/objects/sow_dates.rds r/objects/census_dates.rds r/04_write-models.R
-	Rscript -e 'source("r/04_write-models.R")'
-stan/lognormal_1_1_1.stan: processed-data/germination.rds r/objects/sow_dates.rds r/objects/census_dates.rds r/04_write-models.R
+stan/lognormal_1_1.stan: processed-data/germination.rds r/objects/sow_dates.rds r/objects/census_dates.rds r/functions.R r/header.R r/04_write-models.R
 	Rscript -e 'source("r/04_write-models.R")'
 
 # 05_fit-models.R ----
-r/objects/lognormal_0_0_0.rds: stan/lognormal_0_0_0.stan r/05_fit-models.R
+r/objects/lognormal_0_0.rds: stan/lognormal_0_0.stan r/objects/seeds.txt r/objects/germ_stan.rds r/objects/surv_stan.rds r/functions.R r/header.R r/05_fit-models.R
 	Rscript -e 'source("r/05_fit-models.R")'
-r/objects/lognormal_0_0_1.rds: stan/lognormal_0_0_1.stan r/05_fit-models.R
+r/objects/lognormal_0_1.rds: stan/lognormal_0_1.stan r/objects/seeds.txt r/objects/germ_stan.rds r/objects/surv_stan.rds r/functions.R r/header.R r/05_fit-models.R
 	Rscript -e 'source("r/05_fit-models.R")'
-r/objects/lognormal_0_1_0.rds: stan/lognormal_0_1_0.stan r/05_fit-models.R
+r/objects/lognormal_1_0.rds: stan/lognormal_1_0.stan r/objects/seeds.txt r/objects/germ_stan.rds r/objects/surv_stan.rds r/functions.R r/header.R r/05_fit-models.R
 	Rscript -e 'source("r/05_fit-models.R")'
-r/objects/lognormal_0_1_1.rds: stan/lognormal_0_1_1.stan r/05_fit-models.R
-	Rscript -e 'source("r/05_fit-models.R")'
-r/objects/lognormal_1_0_0.rds: stan/lognormal_1_0_0.stan r/05_fit-models.R
-	Rscript -e 'source("r/05_fit-models.R")'
-r/objects/lognormal_1_0_1.rds: stan/lognormal_1_0_1.stan r/05_fit-models.R
-	Rscript -e 'source("r/05_fit-models.R")'
-r/objects/lognormal_1_1_0.rds: stan/lognormal_1_1_0.stan r/05_fit-models.R
-	Rscript -e 'source("r/05_fit-models.R")'
-r/objects/lognormal_1_1_1.rds: stan/lognormal_1_1_1.stan r/05_fit-models.R
+r/objects/lognormal_1_1.rds: stan/lognormal_1_1.stan r/objects/seeds.txt r/objects/germ_stan.rds r/objects/surv_stan.rds r/functions.R r/header.R r/05_fit-models.R
 	Rscript -e 'source("r/05_fit-models.R")'
 
-# copied from other project
-# ms/ms.pdf: ms/ms.Rmd ms/stomata-independence.bib figures/concepts.pdf figures/h1-raw.pdf figures/h2-raw.pdf figures/h1.pdf figures/h2.pdf objects/modeloutput.rds
-#	Rscript -e 'rmarkdown::render("ms/ms.Rmd", output_format = "bookdown::pdf_document2", output_file = "ms.pdf")'
+# 06_compare-models.R ----
+r/objects/fit.rds: r/objects/lognormal_0_0.rds r/objects/lognormal_0_1.rds r/objects/lognormal_1_0.rds r/objects/lognormal_1_1.rds r/functions.R r/header.R r/06_compare-models.R
+	Rscript -e 'source("r/06_compare-models.R")'
 
-figures/concepts.pdf: r/16_plot-concepts.R
-	Rscript -e 'source("r/16_plot-concepts.R")'
+# 08_plot-germ-pp.R ----
+ms/figures/pp_check_germ.pdf: r/objects/fit.rds r/objects/sow_dates.rds r/objects/germ_stan.rds r/functions.R r/header.R r/08_plot-germ-pp.R
+	Rscript -e 'source("r/08_plot-germ-pp.R")'
 
-figures/h1-raw.pdf: r/08_plot-h1-raw.R
-	Rscript -e 'source("r/08_plot-h1-raw.R")'
+# 09_plot-germ-qgparam.R ----
+ms/figures/h2-germ.pdf: r/objects/fit.rds r/functions.R r/header.R r/09_plot-germ-qgparam.R
+	Rscript -e 'source("r/09_plot-germ-qgparam.R")'
+ms/export/vc_table_germ.rds: r/objects/fit.rds r/functions.R r/header.R r/09_plot-germ-qgparam.R
+	Rscript -e 'source("r/09_plot-germ-qgparam.R")'
+ms/export/diff_vpop_vg_germ: r/objects/fit.rds r/functions.R r/header.R r/09_plot-germ-qgparam.R
+	Rscript -e 'source("r/09_plot-germ-qgparam.R")'
 
-figures/h2-raw.pdf: r/09_plot-h2-raw.R
-	Rscript -e 'source("r/09_plot-h2-raw.R")'
+# 10_plot-germ-average.R ----
+r/objects/mean_germ.rds: r/objects/fit.rds r/functions.R r/header.R r/10_plot-germ-average.R
+	Rscript -e 'source("r/10_plot-germ-average.R")'
 
-figures/h1.pdf: r/11_prepare-plotting.R r/12_plot-h1-pairs.R r/14_plot-h1.R objects/fit.rds
-	Rscript -e 'source("r/11_prepare-plotting.R")'
-	Rscript -e 'source("r/12_plot-h1-pairs.R")'
-	Rscript -e 'source("r/14_plot-h1.R")'
+# 11_plot-surv-qgparam.R ----
+ms/figures/h2-surv.pdf: r/objects/fit.rds r/functions.R r/header.R r/11_plot-surv-qgparam.R
+	Rscript -e 'source("r/11_plot-surv-qgparam.R")'
+ms/export/vc_table_surv.rds: r/objects/fit.rds r/functions.R r/header.R r/11_plot-surv-qgparam.R
+	Rscript -e 'source("r/11_plot-surv-qgparam.R")'
 
-figures/h2.pdf: r/11_prepare-plotting.R r/13_plot-h2-pairs.R r/15_plot-h2.R objects/fit.rds
-	Rscript -e 'source("r/11_prepare-plotting.R")'
-	Rscript -e 'source("r/13_plot-h2-pairs.R")'
-	Rscript -e 'source("r/15_plot-h2.R")'
+# 12_plot-surv-average.R ----
+ms/figures/mean-traits.pdf: r/objects/fit.rds r/objects/mean_germ.rds r/functions.R r/header.R r/12_plot-surv-average.R
+	Rscript -e 'source("r/12_plot-surv-average.R")'
 
-objects/modeloutput.rds: objects/fit.rds r/17_summarize-fit.R
-	Rscript -e 'source("r/17_summarize-fit.R")'
+# 13_test-selection.R ----
+ms/figures/selection.pdf: processed-data/germination.rds r/objects/fit.rds r/functions.R r/header.R r/13_test-selection.R
+	Rscript -e 'source("r/13_test-selection.R")'
+ms/export/df_ind_lm.rds: processed-data/germination.rds r/objects/fit.rds r/functions.R r/header.R r/13_test-selection.R
+	Rscript -e 'source("r/13_test-selection.R")'
+ms/export/df_pop_lm.rds: processed-data/germination.rds r/objects/fit.rds r/functions.R r/header.R r/13_test-selection.R
+	Rscript -e 'source("r/13_test-selection.R")'
 
-objects/fit.rds: r/10_fit-pairs.R processed-data/trimmed-data.rds processed-data/trimmed-phylogeny.rds objects/pair_div.rds
-	Rscript -e 'source("r/10_fit-pairs.R")'
+# 14_plot-climate.R ----
+ms/figures/climate.pdf: raw-data/climate_data.csv r/functions.R r/header.R r/14_plot-climate.R
+	Rscript -e 'source("r/14_plot-climate.R")'
 
-processed-data/trimmed-data.rds: r/06_connect-data.R processed-data/resolved_names.rds processed-data/phy2.rds
-	Rscript -e 'source("r/06_connect-data.R")'
-	
-processed-data/trimmed-phylogeny.rds: r/06_connect-data.R processed-data/resolved_names.rds processed-data/phy2.rds
-	Rscript -e 'source("r/06_connect-data.R")'
-
-objects/pair_div.rds: r/07_make-pairs.R	processed-data/trimmed-data.rds processed-data/trimmed-phylogeny.rds
-	Rscript -e 'source("r/07_make-pairs.R")'
-
-processed-data/resolved_names.rds: r/02_resolve-names.R processed-data/taxize_output.rds
-	Rscript -e 'source("r/02_resolve-names.R")'
-
-processed-data/phy2.rds: r/05_make-subtrees.R processed-data/phy1.rds objects/polytomies.rds
-	Rscript -e 'source("r/05_make-subtrees.R")'
-	
-processed-data/taxize_output.rds: r/01_taxize-data.R
-	Rscript -e 'source("r/01_taxize-data.R")'
-
-processed-data/phy1.rds: r/04_prepare-subtrees.R processed-data/phy.rds
-	Rscript -e 'source("r/04_prepare-subtrees.R")'
-	source raxml/run-raxml.sh
-
-objects/polytomies.rds: r/04_prepare-subtrees.R processed-data/phy.rds
-	Rscript -e 'source("r/04_prepare-subtrees.R")'
-
-processed-data/phy.rds: r/03_make-megatree.R processed-data/resolved_names.rds
-	Rscript -e 'source("r/03_make-megatree.R")'
+# paper ----
+ms/ms.pdf: ms/ms.Rmd ms/mimulus-germination.bib ms/export/data.rds ms/export/df_ind_lm.rds ms/export/ms_pop_lm.rds ms/export/diff_vpop_vg_germ.rds ms/export/nRemove.rds ms/export/vc_table_germ.rds ms/export/vc_table_surv.rds ms/export/diff_vpop_va_germ.rds ms/figures/climate.pdf ms/figures/h2-germ.pdf ms/figures/h2-surv.pdf ms/figures/mean-traits.pdf ms/figures/pp_check_germ.pdf ms/figures/selection.pdf
+	Rscript -e 'rmarkdown::render("ms/ms.Rmd", output_format = "bookdown::pdf_document2", output_file = "ms.pdf")'
+ms/si.pdf: ms/si.Rmd ms/mimulus-germination.bib ms/export/data.rds ms/export/df_ind_lm.rds ms/export/ms_pop_lm.rds ms/export/diff_vpop_vg_germ.rds ms/export/nRemove.rds ms/export/vc_table_germ.rds ms/export/vc_table_surv.rds ms/export/diff_vpop_va_germ.rds ms/figures/climate.pdf ms/figures/h2-germ.pdf ms/figures/h2-surv.pdf ms/figures/mean-traits.pdf ms/figures/pp_check_germ.pdf ms/figures/selection.pdf
+	Rscript -e 'rmarkdown::render("ms/si.Rmd", output_format = "bookdown::pdf_document2", output_file = "si.pdf")'
 
 clean: 
 	\rm -f *~ *.Rout */*~ */*.Rout .RData Rplots.pdf
 	
 cleanall: 
-	\rm -f *.aux *.bbl *.blg *.log *.pdf *~ *.Rout */*~ */*.Rout figures/*.png figures/*.pdf ms/ms.pdf ms/ms.tex objects/*.rds processed-data/*.rds */*.aux */*.log 
+	\rm -f *.aux *.bbl *.blg *.log *.pdf *~ *.Rout */*~ */*.Rout ms/figures/*.pdf ms/ms.pdf ms/ms.tex ms/si.pdf ms/si.tex r/objects/*.rds processed-data/*.rds */*.aux */*.log 
 

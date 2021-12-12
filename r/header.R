@@ -9,6 +9,6 @@ library(magrittr)
 
 source("r/functions.R")
 
-seeds = readr::read_lines("r/objects/seeds.txt")
+seeds = readr::read_lines("raw-data/seeds.txt")
 
 palette(colorRampPalette(c("tomato", "steelblue"), alpha = TRUE)(5))

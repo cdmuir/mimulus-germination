@@ -1,6 +1,5 @@
 source("r/header.R")
 
-
 fit <- readr::read_rds("r/objects/fit.rds")
 fit_summary <- fit$summary()
 

@@ -10,18 +10,14 @@ cat("*.rds filter=lfs diff=lfs merge=lfs -text", "\n", file = ".gitattributes")
 
 tidyr::crossing(
   model = c("discrete_lognormal"),
-  nonadd = c(FALSE, TRUE),
-  poph2 = c(FALSE, TRUE),
-  interaction = c(FALSE, TRUE)
+  poph2 = c(FALSE, TRUE)
 ) %>%
   purrr::pwalk(~{
-    stem = glue::glue("stan/{model}_{nonadd}_{poph2}_{interaction}.stan", 
+    stem = glue::glue("stan/{model}_{poph2}.stan", 
                       model = stringr::str_remove(..1, "discrete_"),
-                      nonadd = as.numeric(..2), 
-                      poph2 = as.numeric(..3), 
-                      interaction = as.numeric(..4))
-    write_model(..1, sow_dates, census_dates, germination, stem,
-                nonadd = ..2, poph2 = ..3, interaction = ..4)
+                      poph2 = as.numeric(..2))
+    write_model(..1, sow_dates, census_dates, germination, stem, nonadd = FALSE,
+                poph2 = ..2, interaction = TRUE)
     cat(glue::glue("{stem} filter=lfs diff=lfs merge=lfs -text"), "\n", 
         file = ".gitattributes", append = TRUE)
     cat(glue::glue("{stem} filter=lfs diff=lfs merge=lfs -text\n",

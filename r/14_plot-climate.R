@@ -27,7 +27,7 @@ climate_data = readr::read_csv("raw-data/climate_data.csv") |>
       name == "Tave_sp" ~ 3
     ))
 
-ggplot() +
+gp <- ggplot() +
   geom_line(
     data = dplyr::filter(climate_data, !is.na(Garden)),
     mapping = aes(season, value, linetype = Garden),
@@ -55,4 +55,6 @@ ggplot() +
     legend.text = element_text(size = 12, hjust = 0.5, vjust = 0.5),
     legend.title = element_text(size = 14, hjust = 0.5)
   )
-ggsave("ms/figures/climate.pdf", width = 6.5, height = 4, units = "in")
+
+ggsave("ms/figures/climate.pdf", plot = gp, width = 6.5, height = 4, 
+       units = "in")

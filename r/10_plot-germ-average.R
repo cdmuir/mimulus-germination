@@ -5,7 +5,7 @@ pars_pop <- glue::glue("bPop_germ[{n}]", n = 1:5)
 pars_ind <-  stringr::str_c("bGeno", pop_levels(), "_germ")
 fit_germ <- readr::read_rds("r/objects/fit.rds") 
 
-df <- fit_germ$draws(c(pars_pop, pars_ind)) %>% 
+df <- fit_germ$draws(dplyr::all_of(c(pars_pop, pars_ind))) %>% 
   posterior::as_draws_df()
 
 df_pop <- df %>%
@@ -36,7 +36,8 @@ df_ind <- df %>%
   dplyr::full_join(df_pop, by = c(".draw", "pop")) %>%
   dplyr::mutate(DaysToGerm = 4 + exp(bPop_germ + bGeno)) %>%
   dplyr::group_by(pop, ind) %>%
-  tidybayes::point_interval(DaysToGerm, .point = median, .interval = tidybayes::qi)
+  tidybayes::point_interval(DaysToGerm, .point = median, 
+                            .interval = tidybayes::qi)
   
 df_pop %<>% dplyr::mutate(DaysToGerm = 4 + exp(bPop_germ))
   

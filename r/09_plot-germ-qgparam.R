@@ -121,9 +121,10 @@ gp2 <- ggplot(dplyr::filter(df, type == "Heritability"),
     strip.text = element_text(size = 12)
   )
 
-cowplot::plot_grid(gp1, gp2, nrow = 1, labels = "AUTO", align = "h",
-                   rel_widths = c(2/3, 1/3), label_y = 0.95)
+gp <- cowplot::plot_grid(gp1, gp2, nrow = 1, labels = "AUTO", align = "h",
+                         rel_widths = c(2/3, 1/3), label_y = 0.95)
 
-ggsave("ms/figures/h2-germ.pdf", width = 6.5, height = 4, units = "in")
+ggsave("ms/figures/h2-germ.pdf", plot = gp, width = 6.5, height = 4, 
+       units = "in")
 
 export2ms(c("vc_table_germ", "diff_vpop_vg_germ"))

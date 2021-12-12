@@ -173,7 +173,7 @@ df_ind_points <- ind %>%
     pop = factor(pop, levels = pop_levels())
   )
   
-ggplot(df_pop_lines, 
+gp <- ggplot(df_pop_lines, 
        aes(DaysToGerm, inv_logit(logit_p_surv), fill = garden, group = garden,
            ymin = inv_logit(.lower), ymax = inv_logit(.upper))
        ) +
@@ -208,7 +208,8 @@ ggplot(df_pop_lines,
     legend.text.align = 0.5
   )
 
-ggsave("ms/figures/selection.pdf", width = 6.5, height = 5, units = "in")
+ggsave("ms/figures/selection.pdf", plot = gp, width = 6.5, height = 5, 
+       units = "in")
 
 
 # Table - should be combined with genotypic results ----
