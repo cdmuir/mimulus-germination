@@ -39,13 +39,9 @@ stan/lognormal_1_1.stan: processed-data/germination.rds r/objects/sow_dates.rds 
 	Rscript -e 'source("r/04_write-models.R")'
 
 # 05_fit-models.R ----
-r/objects/lognormal_0_0.rds: stan/lognormal_0_0.stan r/objects/seeds.txt r/objects/germ_stan.rds r/objects/surv_stan.rds r/functions.R r/header.R r/05_fit-models.R
+r/objects/lognormal_0.rds: stan/lognormal_0.stan raw-data/seeds.txt r/objects/germ_stan.rds r/objects/surv_stan.rds r/functions.R r/header.R r/05_fit-models.R
 	Rscript -e 'source("r/05_fit-models.R")'
-r/objects/lognormal_0_1.rds: stan/lognormal_0_1.stan r/objects/seeds.txt r/objects/germ_stan.rds r/objects/surv_stan.rds r/functions.R r/header.R r/05_fit-models.R
-	Rscript -e 'source("r/05_fit-models.R")'
-r/objects/lognormal_1_0.rds: stan/lognormal_1_0.stan r/objects/seeds.txt r/objects/germ_stan.rds r/objects/surv_stan.rds r/functions.R r/header.R r/05_fit-models.R
-	Rscript -e 'source("r/05_fit-models.R")'
-r/objects/lognormal_1_1.rds: stan/lognormal_1_1.stan r/objects/seeds.txt r/objects/germ_stan.rds r/objects/surv_stan.rds r/functions.R r/header.R r/05_fit-models.R
+r/objects/lognormal_1.rds: stan/lognormal_1.stan raw-data/seeds.txt r/objects/germ_stan.rds r/objects/surv_stan.rds r/functions.R r/header.R r/05_fit-models.R
 	Rscript -e 'source("r/05_fit-models.R")'
 
 # 06_compare-models.R ----

@@ -387,9 +387,9 @@ write_model <- function(
   
   functions_block <- stringr::str_c(
     "functions {\n",
-    readChar("stan/discrete_lognormal.stan", 1e5), 
-    readChar("stan/loglogistic.stan", 1e5),
-    readChar("stan/discrete_loglogistic.stan", 1e5), "\n")
+    readChar("stan/discrete_lognormal.stan", 1e5), "\n") #, 
+    # readChar("stan/loglogistic.stan", 1e5),
+    # readChar("stan/discrete_loglogistic.stan", 1e5), "\n")
 
   for (i in 1:nrow(sow_dates)) {
     
