@@ -9,7 +9,7 @@ df <- fit_germ$draws(dplyr::all_of(c(pars_pop, pars_ind))) %>%
   posterior::as_draws_df()
 
 df_pop <- df %>%
-  dplyr::select(.draw, pars_pop) %>%
+  dplyr::select(.draw, dplyr::all_of(pars_pop)) %>%
   tidyr::pivot_longer(-.draw, names_to = "parameter") %>%
   dplyr::mutate(
     pop = stringr::str_replace(parameter, "^bPop_germ\\[([1-5])\\]$", "\\1"),

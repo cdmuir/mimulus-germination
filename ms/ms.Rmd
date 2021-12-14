@@ -19,7 +19,7 @@ output:
     toc: yes
   bookdown::word_document2: null
 fontsize: 12pt
-linestretch: 1.5
+linestretch: 1
 link-citations: yes
 csl: ../template/american-journal-of-botany.csl
 bibliography: ../ms/mimulus-germination.bib
@@ -42,9 +42,9 @@ $^{4}$ Department of Zoology, University of British Columbia, Vancouver, BC V6T 
 
 $^{*}$ Corresponding author
 
-Manuscript received _______; revision accepted _______.
+<!-- Manuscript received _______; revision accepted _______. -->
 
-*short title*: Selection on germination in *Mimulus cardinalis*
+<!-- *short title*: Selection on germination in *Mimulus cardinalis* -->
 
 ```{r preamble, include = FALSE}
 

@@ -18,21 +18,21 @@ ms/export/data.rds: raw-data/germination.csv r/functions.R r/header.R r/01_proce
 ms/export/nRemove.rds: raw-data/germination.csv r/functions.R r/header.R r/01_process-germ-data.R
 	Rscript -e 'source("r/01_process-germ-data.R")'
 
-# 02_write-germ-stan.R ----
-r/objects/germ_stan.rds: r/objects/sow_dates.rds processed-data/germination.rds r/functions.R r/header.R r/02_write-germ-stan.R
-	Rscript -e 'source("r/02_write-germ-stan.R")'
+# 02_write-models.R ----
+.gitattributes: r/02_write-models.R
+	Rscript -e 'source("r/02_write-models.R")'
+stan/lognormal_0.stan: processed-data/germination.rds r/objects/sow_dates.rds r/objects/census_dates.rds r/functions.R r/header.R r/02_write-models.R
+	Rscript -e 'source("r/02_write-models.R")'
+stan/lognormal_1.stan: processed-data/germination.rds r/objects/sow_dates.rds r/objects/census_dates.rds r/functions.R r/header.R r/02_write-models.R
+	Rscript -e 'source("r/02_write-models.R")'
 
-# 03_write-surv-stan.R ----
-r/objects/surv_stan.rds: raw-data/germination.csv r/functions.R r/header.R r/03_write-surv-stan.R
-	Rscript -e 'source("r/03_write-surv-stan.R")'
+# 03_write-germ-stan.R ----
+r/objects/germ_stan.rds: r/objects/sow_dates.rds processed-data/germination.rds r/functions.R r/header.R r/03_write-germ-stan.R
+	Rscript -e 'source("r/03_write-germ-stan.R")'
 
-# 04_write-models.R ----
-.gitattributes: r/04_write-models.R
-	Rscript -e 'source("r/04_write-models.R")'
-stan/lognormal_0.stan: processed-data/germination.rds r/objects/sow_dates.rds r/objects/census_dates.rds r/functions.R r/header.R r/04_write-models.R
-	Rscript -e 'source("r/04_write-models.R")'
-stan/lognormal_1.stan: processed-data/germination.rds r/objects/sow_dates.rds r/objects/census_dates.rds r/functions.R r/header.R r/04_write-models.R
-	Rscript -e 'source("r/04_write-models.R")'
+# 04_write-surv-stan.R ----
+r/objects/surv_stan.rds: raw-data/germination.csv r/functions.R r/header.R r/04_write-surv-stan.R
+	Rscript -e 'source("r/04_write-surv-stan.R")'
 
 # 05_fit-models.R ----
 r/objects/lognormal_0.rds: stan/lognormal_0.stan raw-data/seeds.txt r/objects/germ_stan.rds r/objects/surv_stan.rds r/functions.R r/header.R r/05_fit-models.R
