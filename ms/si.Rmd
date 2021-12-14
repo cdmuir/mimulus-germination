@@ -18,7 +18,7 @@ output:
     toc: yes
   bookdown::word_document2: null
 fontsize: 12pt
-linestretch: 1.5
+linestretch: 1
 link-citations: yes
 csl: ../template/american-journal-of-botany.csl
 bibliography: ../ms/mimulus-germination.bib
