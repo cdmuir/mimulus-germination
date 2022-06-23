@@ -28,7 +28,7 @@ data$ntd = rep(4, data$nPop_germ)
 # which(purrr::map_lgl(data, function(.x) any(is.na(.x))))
 
 # Fit models -----
-models = c("lognormal_0", "lognormal_1")
+models = c("lognormal_0_1", "lognormal_1_1")
 
 for (i in seq_along(models)) {
 

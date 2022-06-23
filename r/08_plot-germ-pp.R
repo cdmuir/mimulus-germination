@@ -89,7 +89,6 @@ gp <- ggplot(y, aes(DaysToGerm, n, fill = "Observations")) +
   scale_fill_manual(name = NULL, values = "grey50") +
   scale_color_manual(name = NULL, values = "black") +
   guides(fill = guide_legend(override.aes = list(color = "grey50"))) +
-  theme_cowplot() +
   theme(
     axis.title = element_text(size = 12),
     legend.background = element_rect(fill = NA),
@@ -100,4 +99,4 @@ gp <- ggplot(y, aes(DaysToGerm, n, fill = "Observations")) +
   )
 
 ggplot2::ggsave("ms/figures/pp_check_germ.pdf", plot = gp, width = 6.5, 
-                height = 9,  useDingbats = FALSE)
+                height = 9, useDingbats = FALSE)

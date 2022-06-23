@@ -40,13 +40,12 @@ gp <- ggplot() +
   scale_color_manual(
     values = palette(),
     labels = pop_levels() %>% sapply(get_labels) %>% sapply(place_line_break),
-    name = "Population\nof origin"
+    name = "Source\nPopulation"
   ) +
   scale_x_continuous(breaks = 1:3, labels = c("autumn", "winter", "spring"),
                      limits = c(0.75, 3.25)) +
   xlab("Season") +
   ylab(expression(Average~temperature~(degree~C))) +
-  theme_cowplot() +
   theme(
     axis.text = element_text(size = 12),
     axis.title = element_text(size = 14),

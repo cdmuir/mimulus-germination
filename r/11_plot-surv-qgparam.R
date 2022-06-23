@@ -148,21 +148,21 @@ vc_table_surv <- fit_surv_qg %>%
   dplyr::mutate(
     Population = factor(pop, levels = pop_levels()),
     Garden = stringr::str_to_sentence(garden),
-    `Median (95% CI)` = glue::glue("{value} ({.lower}--{.upper})"),
+    `Median (95% CI)` = glue::glue("${value}~({.lower},~{.upper})$"),
     Parameter = factor(parameter, levels = c("vg", "vblock", "vres", "h2"))
   ) %>%
   dplyr::mutate(
     `Median (95% CI)` = stringr::str_replace_all(`Median (95% CI)`, 
                                                   "([0-9].[0-9]{2})e-0([0-9])",
-                                                  "$\\1 \\\\times 10^{-\\2}$")
+                                                  "\\1 \\\\times 10^{-\\2}")
   ) %>%
   dplyr::arrange(Parameter, Population, Garden) %>%
   dplyr::mutate(
     Parameter = dplyr::case_when(
       parameter == "vpop" ~ "$V_\\text{pop}$",
-      parameter == "vg" ~ "$V_\\text{G}$",
+      parameter == "vg" ~ "$V_G$",
       parameter == "vblock" ~ "Block",
-      parameter == "vres" ~ "$V_\\text{E}$",
+      parameter == "vres" ~ "$V_E$",
       parameter == "h2" ~ "$H^2$"
     )
   ) %>%
@@ -188,11 +188,11 @@ df %<>%
                     levels = c("South", "North")),
     par = factor(dplyr::case_when(
       parameter == "vpop" ~ "italic(V)[pop]",
-      parameter == "vg" ~ "italic(V)[G]",
+      parameter == "vg" ~ "italic(V)[italic(G)]",
       parameter == "vblock" ~ "Block", 
-      parameter == "vres" ~ "italic(V)[E]", 
+      parameter == "vres" ~ "italic(V)[italic(E)]", 
       parameter == "h2" ~ "italic(H) ^ 2"
-    ), levels = c("Block", "italic(V)[E]", "italic(V)[G]",
+    ), levels = c("Block", "italic(V)[italic(E)]", "italic(V)[italic(G)]",
                   "italic(H) ^ 2", "italic(V)[pop]"))
   )
 
@@ -227,13 +227,11 @@ gp <- ggplot(df, aes(pop, value, color = pop)) +
     values = c(palette(), "grey50"),
     labels = pop_levels() %>% sapply(get_labels) %>% sapply(place_line_break) %>%
       c(all = "Among\npopulation"),
-    name = "Population\nof origin"
+    name = "Source\nPopulation"
   ) +
   scale_y_log10(labels = scales::label_math(expr = 10^.x, format = log10) ) +
-  xlab("Population") +
   ylab(expression(paste("Variance or Heritability (", log[10], "-scale)"))) +
   ggtitle("Winter survival") +
-  theme_bw() +
   theme(
     axis.text.x = element_blank(),
     axis.text.y = element_text(size = 12),

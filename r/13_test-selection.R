@@ -191,15 +191,14 @@ gp <- ggplot(df_pop_lines,
   geom_point(data = df_pop_points, mapping = aes(color = pop), size = 3) +
   scale_y_continuous(limits = c(0, 1)) +
   scale_color_manual(
-    values = palette()[1:5], name = "population",
+    values = palette()[1:5], name = "Source\nPopulation",
     labels = sapply(pop_levels(), 
                     function(.x) place_line_break(get_labels(.x)))
   ) +
-  scale_fill_manual(values = c("grey", "white")) +
+  scale_fill_manual(values = c("grey", "white"), name = "Garden") +
   xlab("Days to Germination") +
   ylab("Winter Survival") +
   guides(color = guide_legend(keyheight = 3)) +
-  theme_bw() +
   theme(
     axis.text = element_text(size = 12),
     axis.title = element_text(size = 14),
@@ -212,7 +211,7 @@ ggsave("ms/figures/selection.pdf", plot = gp, width = 6.5, height = 5,
        units = "in")
 
 
-# Table - should be combined with genotypic results ----
+# Table ----
 df_pop_lm %<>%
   dplyr::group_by(garden) %>%
   tidyr::pivot_longer(c(-.draw, -garden), names_to = "parameter") %>%
@@ -229,7 +228,7 @@ df_pop_lm %<>%
       garden == "north" ~ "North",
       garden == "south" ~ "South"
     ),
-  `Median (95% CI)` = glue::glue("{value} ({.lower} -- {.upper})"),
+  `Median (95% CI)` = glue::glue("${value}~({.lower},~{.upper})$"),
   ) %>%
   dplyr::select(Garden, Parameter = parameter, `Median (95% CI)`)
 
@@ -249,7 +248,7 @@ df_ind_lm %<>%
       garden == "north" ~ "North",
       garden == "south" ~ "South"
     ),
-    `Median (95% CI)` = glue::glue("{value} ({.lower} -- {.upper})"),
+    `Median (95% CI)` = glue::glue("${value}~({.lower},~{.upper})$"),
   ) %>%
   dplyr::select(Garden, Parameter = parameter, `Median (95% CI)`)
 

@@ -8,6 +8,3 @@ fit_summary %>%
 
 fit_summary %>%
   dplyr::filter(ess_tail < 1e3)
-fit$metadata(
-  
-)

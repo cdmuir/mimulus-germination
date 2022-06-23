@@ -44,6 +44,12 @@ import2ms()
 \setcounter{table}{0}    
 
 \begin{figure}[ht]
+  \includegraphics{figures/range-map.pdf}
+  \caption{Source populations are distributed through the range of \textit{Mimulus cardinalis}. Dark grey points are occurrence records located throughout California and Oregon, USA (Muir and Angert 2017). Source populations for this study are labeled with colored points. Transplant gardens are labeled with bold font in white boxes.}
+  \label{fig:range-map}
+\end{figure}
+
+\begin{figure}[ht]
   \includegraphics[width=\textwidth]{figures/pp_check_germ.pdf}
   \caption{(Caption next page.)}
   \label{fig:pp_check}
@@ -56,13 +62,13 @@ import2ms()
 \begin{figure}[ht]
   \includegraphics[width=\textwidth]{figures/climate.pdf}
   \caption{The average temperature during the 2015-16 experiment (lines) was warmer than the historical normal from 1961-1990 (points). The $y$-axis is the average temperature for a season in the southern (solid line) and northern (dashed line) garden. Points are the average seasonal temperature for the 1961-1990 normal for each population source location. Population color is arranged from orange to blue by latitude of origin from south to north. Season is along the $x$-axis. Autumn encompasses September-November; winter encompasses December-February; spring encompasses March-May. All down-scaled climate are from ClimateNA (see Materials and Methods).}
-  \label{fig:fig:climate}
+  \label{fig:climate}
 \end{figure}
 
 \clearpage
 
 ```{r vc_table_germ, eval=TRUE, echo=FALSE}
-knitr::kable(vc_table_germ, format = "markdown", caption = "\\label{tab:vc_table_germ} We decomposed variance in germination rate among populations ($V_\\text{pop}$), additive genetic differences among individuals in the base population ($V_\\text{G}$), experimental blocks within the greenhouse (Block), and residual environmental variance ($V_\\text{E}$). The narrow-sense heritability $h^2$ is $V_\\text{G} / (V_\\text{G} + V_\\text{E})$. Point estimates and 95\\% confidence intervals (CI) are estimated from the median and quantiles of the posterior distribution.", label = NA)
+knitr::kable(vc_table_germ, format = "markdown", caption = "\\label{tab:vc_table_germ} We decomposed variance in time to germination among populations ($V_\\text{pop}$), additive genetic differences among individuals in the base population ($V_G$), maternal effects ($V_M$) experimental blocks within the greenhouse (Block), and residual environmental variance ($V_E$). The broad-sense heritability $H^2$ is the proportion of variance contributed by $V_G$. Point estimates and 95\\% confidence intervals (CI) are estimated from the median and quantiles of the posterior distribution.", label = NA)
 ```
 
 \clearpage
@@ -70,7 +76,7 @@ knitr::kable(vc_table_germ, format = "markdown", caption = "\\label{tab:vc_table
 \blandscape
 
 ```{r vc_table_surv, eval=TRUE, echo=FALSE}
-knitr::kable(vc_table_surv, format = "markdown", caption = "\\label{tab:vc_table_surv} We decomposed variance in winter survival ($\\text{logit}(p_\\text{surv})$) among populations ($V_\\text{pop}$), additive genetic differences among individuals in the base population ($V_\\text{G}$), experimental blocks in the field (Block), and residual environmental variance ($V_\\text{E}$) for the North and South garden separately. The narrow-sense heritability $h^2$ is $V_\\text{G} / (V_\\text{G} + V_\\text{E})$. Point estimates and 95\\% confidence intervals (CI) are estimated from the median and quantiles of the posterior distribution.", label = NA)
+knitr::kable(vc_table_surv, format = "markdown", caption = "\\label{tab:vc_table_surv} We decomposed variance in winter survival ($\\text{logit}(p_\\text{surv})$) among populations ($V_\\text{pop}$), additive genetic differences among individuals in the base population ($V_\\text{G}$), experimental blocks in the field (Block), and residual environmental variance ($V_\\text{E}$) for the North and South garden separately. The broad-sense heritability $H^2$ is the proportion of variance contributed by $V_G$. Point estimates and 95\\% confidence intervals (CI) are estimated from the median and quantiles of the posterior distribution.", label = NA)
 ```
 
 \elandscape
@@ -78,11 +84,11 @@ knitr::kable(vc_table_surv, format = "markdown", caption = "\\label{tab:vc_table
 \clearpage
 
 ```{r df_pop_lm, eval=TRUE, echo=FALSE}
-knitr::kable(df_pop_lm, format = "markdown", caption = "\\label{tab:df_pop_lm} Between-population directional selection coefficient estimates and confidence intervals. In both North and South gardens, we estimated selection on increased germination rate (log-mean scale) caused by increased winter survival ($\\text{logit}(p_\\text{surv})$). The parameters are the linear regression slope and intercept. Point estimates and 95\\% confidence intervals (CI) are estimated from the median and quantiles of the posterior distribution.", label = NA)
+knitr::kable(df_pop_lm, format = "markdown", caption = "\\label{tab:df_pop_lm} Between-population directional selection coefficient estimates and confidence intervals. In both North and South gardens, we estimated selection on time to germination (log-mean scale) caused by increased winter survival ($\\text{logit}(p_\\text{surv})$). The parameters are the linear regression slope and intercept. Point estimates and 95\\% confidence intervals (CI) are estimated from the median and quantiles of the posterior distribution.", label = NA)
 ```
 
 ```{r df_ind_lm, eval=TRUE, echo=FALSE}
-knitr::kable(df_ind_lm, format = "markdown", caption = "\\label{tab:df_ind_lm} Genotypic directional selection coefficient estimates and confidence intervals. In both North and South gardens, we estimated selection on increased germination rate (log-mean scale) caused by increased winter survival ($\\text{logit}(p_\\text{surv})$). The parameters are the linear regression slope and intercept. Point estimates and 95\\% confidence intervals (CI) are estimated from the median and quantiles of the posterior distribution.", label = NA)
+knitr::kable(df_ind_lm, format = "markdown", caption = "\\label{tab:df_ind_lm} Genotypic directional selection coefficient estimates and confidence intervals. In both North and South gardens, we estimated selection on time to germination (log-mean scale) caused by increased winter survival ($\\text{logit}(p_\\text{surv})$). The parameters are the linear regression slope and intercept. Point estimates and 95\\% confidence intervals (CI) are estimated from the median and quantiles of the posterior distribution.", label = NA)
 ```
 
 \clearpage

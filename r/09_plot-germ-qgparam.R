@@ -1,7 +1,7 @@
 source("r/header.r")
 
 # Load model and calculate additive genetic variance
-pars <- c("bPop_germ", "sGeno_germ", "sBlock_germ", "sigma")
+pars <- c("bPop_germ", "sGeno_germ", "sMat_germ", "sBlock_germ", "sigma")
 fit_germ <- readr::read_rds("r/objects/fit.rds")$draws(pars) %>%
   posterior::as_draws_df() %>%
   dplyr::rowwise() %>%
@@ -9,32 +9,34 @@ fit_germ <- readr::read_rds("r/objects/fit.rds")$draws(pars) %>%
     vpop = var(c(`bPop_germ[1]`, `bPop_germ[2]`, `bPop_germ[3]`, `bPop_germ[4]`, 
                  `bPop_germ[5]`)) * 4/5,
     vg = 4 * sGeno_germ ^ 2,
+    vmat = sMat_germ ^ 2,
     vblock = sBlock_germ ^ 2,
     vres = sigma ^ 2,
-    vp = vg + vblock + vres,
+    vp = vg + vmat + vblock + vres,
     h2 = vg / vp
   ) %>%
   dplyr::ungroup()
 
 # Table summarizing variance components
 vc_table_germ <- fit_germ %>%
-  dplyr::select(vpop, vg, vblock, vres, h2) %T>%
+  dplyr::select(vpop, vg, vmat, vblock, vres, h2) %T>%
   assign(x = "diff_vpop_vg", envir = .GlobalEnv) %>%
   tidyr::pivot_longer(tidyr::everything()) %>%
   dplyr::group_by(name) %>%
   tidybayes::point_interval(.point = median, .interval = tidybayes::qi) %>%
   dplyr::mutate(dplyr::across(value:.upper, signif, digits = 3)) %>%
   dplyr::mutate(
-    `Median (95\\% CI)` = glue::glue("{value} ({.lower}--{.upper})"),
-    Parameter = factor(name, levels = c("vpop", "vg", "vblock", "vres", "h2"))
+    `Median (95\\% CI)` = glue::glue("${value}~({.lower},~{.upper})$"),
+    Parameter = factor(name, levels = c("vpop", "vg", "vmat", "vblock", "vres", "h2"))
   ) %>%
   dplyr::arrange(Parameter) %>%
   dplyr::mutate(
     Parameter = dplyr::case_when(
       name == "vpop" ~ "$V_\\text{pop}$",
-      name == "vg" ~ "$V_\\text{G}$",
+      name == "vg" ~ "$V_G$",
+      name == "vmat" ~ "$V_M$",
       name == "vblock" ~ "Block",
-      name == "vres" ~ "$V_\\text{E}$",
+      name == "vres" ~ "$V_E$",
       name == "h2" ~ "$H^2$"
     )
   ) %>%
@@ -47,10 +49,10 @@ diff_vpop_vg_germ <- diff_vpop_vg %>%
 
 # Figure summarizing variance components
 df <- fit_germ %>%
-  dplyr::select(vpop, vg, vblock, vres, h2) %>%
+  dplyr::select(vpop, vg, vmat, vblock, vres, h2) %>%
   tidyr::pivot_longer(tidyr::everything(), names_to = "parameter") %>%
   dplyr::mutate(
-    parameter = factor(parameter, levels = c("vpop", "vg", "vblock", "vres", "h2")),
+    parameter = factor(parameter, levels = c("vpop", "vg", "vmat", "vblock", "vres", "h2")),
     type = dplyr::case_when(
       stringr::str_detect(parameter, "^v[a-z]+$") ~ "Variance components",
       stringr::str_detect(parameter, "^[hH]2$") ~ "Heritability"
@@ -76,13 +78,14 @@ gp1 <- ggplot(dplyr::filter(df, type == "Variance components"),
   scale_x_discrete(labels = c(
     expression(italic(V)[pop]), 
     expression(italic(V)[G]), 
+    expression(italic(V)[M]), 
     "Block", 
     expression(italic(V)[E])
   )) +
   xlab(element_blank()) +
   ylab("Variance") +
   ggtitle("Germination rate") +
-  theme_bw() +
+  ylim(0, 0.3) +
   theme(
     axis.text = element_text(size = 12),
     axis.ticks.x = element_blank(),
@@ -112,7 +115,6 @@ gp2 <- ggplot(dplyr::filter(df, type == "Heritability"),
   ylim(0, 1) +
   xlab(element_blank()) +
   ylab("Heritability") +
-  theme_bw() +
   theme(
     axis.text = element_text(size = 12),
     axis.ticks.x = element_blank(),

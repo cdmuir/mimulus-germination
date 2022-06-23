@@ -2,7 +2,7 @@
 
 # Function to create custom generated quantities blocks in Stan for each subcohort-pop combination
 make_germ_generated_quantities <- function(pop, sub_cohort, start, model, 
-                                           nonadd) {
+                                           nonadd, maternal) {
   
   # Checks
   check_pop(pop)
@@ -39,6 +39,14 @@ make_germ_generated_quantities <- function(pop, sub_cohort, start, model,
       stringr::str_c(sprintf("      bSireDam%s_germ[SireDam%s[i]]);", pop, suffix))
     
   }
+
+  if (maternal) {
+    
+    generated_quantities_block %<>% 
+      stringr::str_replace("\\);$", " +\n") %>%
+      stringr::str_c(sprintf("      bMat%s_germ[Dam%s[i]]);", pop, suffix))
+    
+  }
   
   generated_quantities_block %<>% stringr::str_c(sprintf("
     log_lik_germ[%si] = %s_%s_lpmf(DaysToGerm%s[i] | mu%s_germ[i]%s);
@@ -51,7 +59,7 @@ make_germ_generated_quantities <- function(pop, sub_cohort, start, model,
 }
 
 # Function to create custom model blocks in Stan for each subcohort-pop combination
-make_germ_model <- function(pop, sub_cohort, model, nonadd) {
+make_germ_model <- function(pop, sub_cohort, model, nonadd, maternal) {
   
   # Checks
   check_pop(pop)
@@ -84,6 +92,13 @@ make_germ_model <- function(pop, sub_cohort, model, nonadd) {
     model_block %<>% 
       stringr::str_replace("\\);", " +\n") %>%
       stringr::str_c(sprintf("      bSireDam%s_germ[SireDam%s[i]]);", pop, suffix))
+    
+  }
+  if (maternal) {
+    
+    model_block %<>% 
+      stringr::str_replace("\\);", " +\n") %>%
+      stringr::str_c(sprintf("      bMat%s_germ[Dam%s[i]]);", pop, suffix))
     
   }
   
@@ -380,7 +395,7 @@ make_surv_data <- function(pop, nonadd) {
 # Write Stan model ----
 write_model <- function(
   model, sow_dates, census_dates, data, file, nonadd = TRUE,
-  poph2 = TRUE, interaction = TRUE
+  poph2 = TRUE, interaction = TRUE, maternal = TRUE
 ) {
   
   ## Functions Block (germination only) -----
@@ -474,7 +489,7 @@ write_model <- function(
     vector[nBlock_germ] bBlock_germ;
     real<lower=0> sBlock_germ;
   
-  // Additive genetic variance
+  // Genetic variance
     vector[nSireCUR_germ] bGenoCUR_germ;
     vector[nSireWFM_germ] bGenoWFM_germ;
     vector[nSireNMT_germ] bGenoNMT_germ;
@@ -538,6 +553,20 @@ write_model <- function(
     
   }
   
+  if (maternal) {
+    parameters_block_germ %<>%
+      stringr::str_c("
+      
+  // Maternal effects
+    vector[nSireCUR_germ] bMatCUR_germ;
+    vector[nSireWFM_germ] bMatWFM_germ;
+    vector[nSireNMT_germ] bMatNMT_germ;
+    vector[nSireLIJ_germ] bMatLIJ_germ;
+    vector[nSireRCK_germ] bMatRCK_germ;
+  
+    real<lower=0> sMat_germ;\n")
+  }
+  
   parameters_block_germ %<>% 
     stringr::str_c(add_parameter_definitions(model))
   
@@ -555,7 +584,7 @@ write_model <- function(
     vector[nBlock_surv] bBlock_surv;
     real<lower=0> sBlock_surv;
   
-  // Additive genetic variance
+  // Genetic variance
     vector[nSireCUR_surv] bGenoCUR_surv;
     vector[nSireWFM_surv] bGenoWFM_surv;
     vector[nSireNMT_surv] bGenoNMT_surv;
@@ -775,6 +804,20 @@ write_model <- function(
     
   }
   
+  if (maternal) {
+    
+    model_priors_germ %<>% 
+      stringr::str_c("
+
+  sMat_germ ~ cauchy(0, 0.1);
+  bMatCUR_germ ~ normal(0, sMat_germ);
+  bMatWFM_germ ~ normal(0, sMat_germ);
+  bMatNMT_germ ~ normal(0, sMat_germ);
+  bMatLIJ_germ ~ normal(0, sMat_germ);
+  bMatRCK_germ ~ normal(0, sMat_germ);")
+    
+  }
+  
   model_priors_germ %<>% stringr::str_c("\n", add_parameter_priors(model))
   
   ## Model Block (survival priors) ----
@@ -935,7 +978,7 @@ write_model <- function(
         "bSireDam\\1_surv ~ multi_normal(Zero, quad_form_diag(OmegaSireDam\\2, tauSireDam\\2_surv));"
       ) %>% 
       stringr::str_c(
-        stringr::str_c(glue::glue("\n\tOmegaGeno{pop} ~ lkj_corr(2);\n", 
+        stringr::str_c(glue::glue("\nOmegaGeno{pop} ~ lkj_corr(2);\n", 
                                 pop = if (poph2) {pop_levels()} else {""}), 
                        collapse = "\n")) %>%
       stringr::str_c(
@@ -962,7 +1005,8 @@ write_model <- function(
           pop = j, 
           sub_cohort = i, 
           model = model, 
-          nonadd = nonadd
+          nonadd = nonadd,
+          maternal = maternal
         )
       )
     }
@@ -1010,7 +1054,8 @@ write_model <- function(
           sub_cohort = i, 
           start = start,
           model = model, 
-          nonadd = nonadd
+          nonadd = nonadd,
+          maternal = maternal
         ))
       start %<>% stringr::str_c("n", "_", i, "_", j, " + ")
     }

@@ -8,8 +8,8 @@
 \usepackage{amsmath,amssymb}
 \usepackage{lmodern}
 \usepackage{setspace}
-\usepackage{ifxetex,ifluatex}
-\ifnum 0\ifxetex 1\fi\ifluatex 1\fi=0 % if pdftex
+\usepackage{iftex}
+\ifPDFTeX
   \usepackage[T1]{fontenc}
   \usepackage[utf8]{inputenc}
   \usepackage{textcomp} % provide euro and other symbols
@@ -100,7 +100,7 @@
 % \setstretch{1.8999999999999999}
 
 \usepackage{lineno}
-% \linenumbers % toggle on for linenumbers
+\linenumbers % toggle on for linenumbers
 
 \usepackage{lscape}
 \newcommand{\blandscape}{\begin{landscape}}
@@ -120,7 +120,7 @@
 \DeclareGraphicsExtensions{.pdf,.png, %
     .jpg,.mps,.jpeg,.jbig2,.jb2,.JPG,.JPEG,.JBIG2,.JB2}
     
-\ifluatex
+\ifLuaTeX
   \usepackage{selnolig}  % disable illegal ligatures
 \fi
 
@@ -144,6 +144,12 @@
 \setcounter{table}{0}
 
 \begin{figure}[ht]
+  \includegraphics{figures/range-map.pdf}
+  \caption{Source populations are distributed through the range of \textit{Mimulus cardinalis}. Dark grey points are occurrence records located throughout California and Oregon, USA (Muir and Angert 2017). Source populations for this study are labeled with colored points. Transplant gardens are labeled with bold font in white boxes.}
+  \label{fig:range-map}
+\end{figure}
+
+\begin{figure}[ht]
   \includegraphics[width=\textwidth]{figures/pp_check_germ.pdf}
   \caption{(Caption next page.)}
   \label{fig:pp_check}
@@ -156,13 +162,13 @@
 \begin{figure}[ht]
   \includegraphics[width=\textwidth]{figures/climate.pdf}
   \caption{The average temperature during the 2015-16 experiment (lines) was warmer than the historical normal from 1961-1990 (points). The $y$-axis is the average temperature for a season in the southern (solid line) and northern (dashed line) garden. Points are the average seasonal temperature for the 1961-1990 normal for each population source location. Population color is arranged from orange to blue by latitude of origin from south to north. Season is along the $x$-axis. Autumn encompasses September-November; winter encompasses December-February; spring encompasses March-May. All down-scaled climate are from ClimateNA (see Materials and Methods).}
-  \label{fig:fig:climate}
+  \label{fig:climate}
 \end{figure}
 
 \clearpage
 
 \begin{longtable}[]{@{}ll@{}}
-\caption{\label{tab:vc_table_germ} We decomposed variance in germination rate among populations (\(V_\text{pop}\)), additive genetic differences among individuals in the base population (\(V_\text{G}\)), experimental blocks within the greenhouse (Block), and residual environmental variance (\(V_\text{E}\)). The narrow-sense heritability \(h^2\) is \(V_\text{G} / (V_\text{G} + V_\text{E})\). Point estimates and 95\% confidence intervals (CI) are estimated from the median and quantiles of the posterior distribution.}\tabularnewline
+\caption{\label{tab:vc_table_germ} We decomposed variance in time to germination among populations (\(V_\text{pop}\)), additive genetic differences among individuals in the base population (\(V_G\)), maternal effects (\(V_M\)) experimental blocks within the greenhouse (Block), and residual environmental variance (\(V_E\)). The broad-sense heritability \(H^2\) is the proportion of variance contributed by \(V_G\). Point estimates and 95\% confidence intervals (CI) are estimated from the median and quantiles of the posterior distribution.}\tabularnewline
 \toprule
 Parameter & Median (95\% CI) \\
 \midrule
@@ -171,11 +177,12 @@ Parameter & Median (95\% CI) \\
 Parameter & Median (95\% CI) \\
 \midrule
 \endhead
-\(V_\text{pop}\) & 0.139 (0.0877--0.203) \\
-\(V_\text{G}\) & 0.116 (0.0839--0.168) \\
-Block & 0.0354 (0.024--0.0556) \\
-\(V_\text{E}\) & 0.266 (0.258--0.275) \\
-\(H^2\) & 0.278 (0.215--0.358) \\
+\(V_\text{pop}\) & \(0.142~(0.0772,~0.232)\) \\
+\(V_G\) & \(0.16~(0.112,~0.235)\) \\
+\(V_M\) & \(0.036~(0.0243,~0.0546)\) \\
+Block & \(0.0355~(0.0238,~0.0569)\) \\
+\(V_E\) & \(0.251~(0.244,~0.26)\) \\
+\(H^2\) & \(0.33~(0.257,~0.422)\) \\
 \bottomrule
 \end{longtable}
 
@@ -184,69 +191,85 @@ Block & 0.0354 (0.024--0.0556) \\
 \blandscape
 
 \begin{longtable}[]{@{}
-  >{\raggedright\arraybackslash}p{(\columnwidth - 6\tabcolsep) * \real{0.27}}
-  >{\raggedright\arraybackslash}p{(\columnwidth - 6\tabcolsep) * \real{0.07}}
-  >{\raggedright\arraybackslash}p{(\columnwidth - 6\tabcolsep) * \real{0.14}}
-  >{\raggedright\arraybackslash}p{(\columnwidth - 6\tabcolsep) * \real{0.52}}@{}}
-\caption{\label{tab:vc_table_surv} We decomposed variance in winter survival (\(\text{logit}(p_\text{surv})\)) among populations (\(V_\text{pop}\)), additive genetic differences among individuals in the base population (\(V_\text{G}\)), experimental blocks in the field (Block), and residual environmental variance (\(V_\text{E}\)) for the North and South garden separately. The narrow-sense heritability \(h^2\) is \(V_\text{G} / (V_\text{G} + V_\text{E})\). Point estimates and 95\% confidence intervals (CI) are estimated from the median and quantiles of the posterior distribution.}\tabularnewline
+  >{\raggedright\arraybackslash}p{(\columnwidth - 6\tabcolsep) * \real{0.2762}}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 6\tabcolsep) * \real{0.0667}}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 6\tabcolsep) * \real{0.1429}}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 6\tabcolsep) * \real{0.5143}}@{}}
+\caption{\label{tab:vc_table_surv} We decomposed variance in winter survival (\(\text{logit}(p_\text{surv})\)) among populations (\(V_\text{pop}\)), additive genetic differences among individuals in the base population (\(V_\text{G}\)), experimental blocks in the field (Block), and residual environmental variance (\(V_\text{E}\)) for the North and South garden separately. The broad-sense heritability \(H^2\) is the proportion of variance contributed by \(V_G\). Point estimates and 95\% confidence intervals (CI) are estimated from the median and quantiles of the posterior distribution.}\tabularnewline
 \toprule
-Population & Garden & Parameter & Median (95\% CI) \\
+\begin{minipage}[b]{\linewidth}\raggedright
+Population
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Garden
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Parameter
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Median (95\% CI)
+\end{minipage} \\
 \midrule
 \endfirsthead
 \toprule
-Population & Garden & Parameter & Median (95\% CI) \\
+\begin{minipage}[b]{\linewidth}\raggedright
+Population
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Garden
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Parameter
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Median (95\% CI)
+\end{minipage} \\
 \midrule
 \endhead
-Sweetwater River & North & \(H^2\) & 0.00815 (0.00263--0.0205) \\
-Sweetwater River & North & \(V_\text{E}\) & 0.181 (0.15--0.217) \\
-Sweetwater River & North & \(V_\text{G}\) & 0.0015 (0.000512--0.00424) \\
-Sweetwater River & North & \(V_\text{pop}\) & 0.00743 (0.0045--0.0115) \\
-Sweetwater River & North & Block & 0.0015 (0.000512--0.00424) \\
-West Fork Mojave River & North & \(H^2\) & 0.0087 (0.00274--0.0209) \\
-West Fork Mojave River & North & \(V_\text{E}\) & 0.197 (0.159--0.226) \\
-West Fork Mojave River & North & \(V_\text{G}\) & 0.00175 (0.000563--0.00463) \\
-West Fork Mojave River & North & \(V_\text{pop}\) & 0.00743 (0.0045--0.0115) \\
-West Fork Mojave River & North & Block & 0.00175 (0.000563--0.00463) \\
-North Fork Middle Tule River & North & \(H^2\) & 0.00794 (0.00259--0.0202) \\
-North Fork Middle Tule River & North & \(V_\text{E}\) & 0.174 (0.134--0.213) \\
-North Fork Middle Tule River & North & \(V_\text{G}\) & 0.00141 (0.000464--0.00422) \\
-North Fork Middle Tule River & North & \(V_\text{pop}\) & 0.00743 (0.0045--0.0115) \\
-North Fork Middle Tule River & North & Block & 0.00141 (0.000464--0.00422) \\
-Little Jamison Creek & North & \(H^2\) & 0.00963 (0.00296--0.0226) \\
-Little Jamison Creek & North & \(V_\text{E}\) & 0.221 (0.191--0.24) \\
-Little Jamison Creek & North & \(V_\text{G}\) & 0.0021 (0.000701--0.00546) \\
-Little Jamison Creek & North & \(V_\text{pop}\) & 0.00743 (0.0045--0.0115) \\
-Little Jamison Creek & North & Block & 0.0021 (0.000701--0.00546) \\
-Rock Creek & North & \(H^2\) & 0.0101 (0.00307--0.0236) \\
-Rock Creek & North & \(V_\text{E}\) & 0.241 (0.227--0.248) \\
-Rock Creek & North & \(V_\text{G}\) & 0.00247 (0.000765--0.00586) \\
-Rock Creek & North & \(V_\text{pop}\) & 0.00743 (0.0045--0.0115) \\
-Rock Creek & North & Block & 0.00247 (0.000765--0.00586) \\
-Sweetwater River & South & \(H^2\) & 0.000285 (5.3e-05--0.00326) \\
-Sweetwater River & South & \(V_\text{E}\) & 0.0644 (0.0393--0.101) \\
-Sweetwater River & South & \(V_\text{G}\) & \(2.07 \times 10^{-5}\) (\(2.95 \times 10^{-6}\)--0.000305) \\
-Sweetwater River & South & \(V_\text{pop}\) & 0.00143 (0.000626--0.0028) \\
-Sweetwater River & South & Block & 0.00528 (0.00155--0.0205) \\
-West Fork Mojave River & South & \(H^2\) & 0.000316 (\(5.88 \times 10^{-5}\)--0.00328) \\
-West Fork Mojave River & South & \(V_\text{E}\) & 0.0714 (0.0483--0.113) \\
-West Fork Mojave River & South & \(V_\text{G}\) & \(2.41 \times 10^{-5}\) (\(4.54 \times 10^{-6}\)--0.000321) \\
-West Fork Mojave River & South & \(V_\text{pop}\) & 0.00143 (0.000626--0.0028) \\
-West Fork Mojave River & South & Block & 0.00645 (0.00201--0.0266) \\
-North Fork Middle Tule River & South & \(H^2\) & 0.000356 (\(6.54 \times 10^{-5}\)--0.00334) \\
-North Fork Middle Tule River & South & \(V_\text{E}\) & 0.0844 (0.0534--0.122) \\
-North Fork Middle Tule River & South & \(V_\text{G}\) & \(3.42 \times 10^{-5}\) (\(5.84 \times 10^{-6}\)--0.000425) \\
-North Fork Middle Tule River & South & \(V_\text{pop}\) & 0.00143 (0.000626--0.0028) \\
-North Fork Middle Tule River & South & Block & 0.00894 (0.00264--0.031) \\
-Little Jamison Creek & South & \(H^2\) & 0.000381 (\(7.29 \times 10^{-5}\)--0.00424) \\
-Little Jamison Creek & South & \(V_\text{E}\) & 0.0934 (0.0606--0.13) \\
-Little Jamison Creek & South & \(V_\text{G}\) & \(4.07 \times 10^{-5}\) (\(8.42 \times 10^{-6}\)--0.000513) \\
-Little Jamison Creek & South & \(V_\text{pop}\) & 0.00143 (0.000626--0.0028) \\
-Little Jamison Creek & South & Block & 0.0108 (0.00354--0.0353) \\
-Rock Creek & South & \(H^2\) & 0.000525 (0.000104--0.00627) \\
-Rock Creek & South & \(V_\text{E}\) & 0.131 (0.1--0.159) \\
-Rock Creek & South & \(V_\text{G}\) & \(8.36 \times 10^{-5}\) (\(1.57 \times 10^{-5}\)--0.000972) \\
-Rock Creek & South & \(V_\text{pop}\) & 0.00143 (0.000626--0.0028) \\
-Rock Creek & South & Block & 0.0225 (0.00926--0.0511) \\
+Sweetwater River & North & \(H^2\) & \(0.00742~(0.00208,~0.0211)\) \\
+Sweetwater River & North & \(V_\text{pop}\) & \(0.00744~(0.00429,~0.0109)\) \\
+Sweetwater River & North & \(V_E\) & \(0.186~(0.144,~0.219)\) \\
+Sweetwater River & North & \(V_G\) & \(0.0014~(0.000327,~0.00415)\) \\
+Sweetwater River & North & Block & \(0.0014~(0.000327,~0.00415)\) \\
+West Fork Mojave River & North & \(H^2\) & \(0.00787~(0.00219,~0.0212)\) \\
+West Fork Mojave River & North & \(V_\text{pop}\) & \(0.00744~(0.00429,~0.0109)\) \\
+West Fork Mojave River & North & \(V_E\) & \(0.201~(0.16,~0.228)\) \\
+West Fork Mojave River & North & \(V_G\) & \(0.00167~(0.000379,~0.00453)\) \\
+West Fork Mojave River & North & Block & \(0.00167~(0.000379,~0.00453)\) \\
+North Fork Middle Tule River & North & \(H^2\) & \(0.0072~(0.00195,~0.0208)\) \\
+North Fork Middle Tule River & North & \(V_\text{pop}\) & \(0.00744~(0.00429,~0.0109)\) \\
+North Fork Middle Tule River & North & \(V_E\) & \(0.176~(0.132,~0.212)\) \\
+North Fork Middle Tule River & North & \(V_G\) & \(0.00132~(0.000292,~0.00394)\) \\
+North Fork Middle Tule River & North & Block & \(0.00132~(0.000292,~0.00394)\) \\
+Little Jamison Creek & North & \(H^2\) & \(0.00854~(0.00236,~0.0241)\) \\
+Little Jamison Creek & North & \(V_\text{pop}\) & \(0.00744~(0.00429,~0.0109)\) \\
+Little Jamison Creek & North & \(V_E\) & \(0.224~(0.185,~0.241)\) \\
+Little Jamison Creek & North & \(V_G\) & \(0.00194~(0.000487,~0.00563)\) \\
+Little Jamison Creek & North & Block & \(0.00194~(0.000487,~0.00563)\) \\
+Rock Creek & North & \(H^2\) & \(0.00894~(0.00256,~0.0259)\) \\
+Rock Creek & North & \(V_\text{pop}\) & \(0.00744~(0.00429,~0.0109)\) \\
+Rock Creek & North & \(V_E\) & \(0.242~(0.228,~0.248)\) \\
+Rock Creek & North & \(V_G\) & \(0.00221~(0.000632,~0.00642)\) \\
+Rock Creek & North & Block & \(0.00221~(0.000632,~0.00642)\) \\
+Sweetwater River & South & \(H^2\) & \(8.91 \times 10^{-5}~(5.89 \times 10^{-6},~0.00448)\) \\
+Sweetwater River & South & \(V_\text{pop}\) & \(0.00147~(0.000618,~0.00287)\) \\
+Sweetwater River & South & \(V_E\) & \(0.0683~(0.044,~0.107)\) \\
+Sweetwater River & South & \(V_G\) & \(8.24 \times 10^{-6}~(3.32 \times 10^{-7},~0.000341)\) \\
+Sweetwater River & South & Block & \(0.00573~(0.00174,~0.0187)\) \\
+West Fork Mojave River & South & \(H^2\) & \(9.34 \times 10^{-5}~(5.95 \times 10^{-6},~0.00545)\) \\
+West Fork Mojave River & South & \(V_\text{pop}\) & \(0.00147~(0.000618,~0.00287)\) \\
+West Fork Mojave River & South & \(V_E\) & \(0.0798~(0.0481,~0.117)\) \\
+West Fork Mojave River & South & \(V_G\) & \(8.89 \times 10^{-6}~(4.7e-07,~0.000579)\) \\
+West Fork Mojave River & South & Block & \(0.00867~(0.00225,~0.0244)\) \\
+North Fork Middle Tule River & South & \(H^2\) & \(0.000111~(6.73 \times 10^{-6},~0.00571)\) \\
+North Fork Middle Tule River & South & \(V_\text{pop}\) & \(0.00147~(0.000618,~0.00287)\) \\
+North Fork Middle Tule River & South & \(V_E\) & \(0.0898~(0.0645,~0.125)\) \\
+North Fork Middle Tule River & South & \(V_G\) & \(1.24 \times 10^{-5}~(5.37 \times 10^{-7},~0.000569)\) \\
+North Fork Middle Tule River & South & Block & \(0.0102~(0.00369,~0.0302)\) \\
+Little Jamison Creek & South & \(H^2\) & \(0.000109~(7.4e-06,~0.00653)\) \\
+Little Jamison Creek & South & \(V_\text{pop}\) & \(0.00147~(0.000618,~0.00287)\) \\
+Little Jamison Creek & South & \(V_E\) & \(0.0988~(0.0633,~0.136)\) \\
+Little Jamison Creek & South & \(V_G\) & \(1.47 \times 10^{-5}~(6.92 \times 10^{-7},~0.000819)\) \\
+Little Jamison Creek & South & Block & \(0.0126~(0.00426,~0.0352)\) \\
+Rock Creek & South & \(H^2\) & \(0.000148~(1.03 \times 10^{-5},~0.00803)\) \\
+Rock Creek & South & \(V_\text{pop}\) & \(0.00147~(0.000618,~0.00287)\) \\
+Rock Creek & South & \(V_E\) & \(0.133~(0.103,~0.161)\) \\
+Rock Creek & South & \(V_G\) & \(2.54 \times 10^{-5}~(1.49 \times 10^{-6},~0.00144)\) \\
+Rock Creek & South & Block & \(0.0239~(0.0108,~0.0507)\) \\
 \bottomrule
 \end{longtable}
 
@@ -255,7 +278,7 @@ Rock Creek & South & Block & 0.0225 (0.00926--0.0511) \\
 \clearpage
 
 \begin{longtable}[]{@{}lll@{}}
-\caption{\label{tab:df_pop_lm} Between-population directional selection coefficient estimates and confidence intervals. In both North and South gardens, we estimated selection on increased germination rate (log-mean scale) caused by increased winter survival (\(\text{logit}(p_\text{surv})\)). The parameters are the linear regression slope and intercept. Point estimates and 95\% confidence intervals (CI) are estimated from the median and quantiles of the posterior distribution.}\tabularnewline
+\caption{\label{tab:df_pop_lm} Between-population directional selection coefficient estimates and confidence intervals. In both North and South gardens, we estimated selection on time to germination (log-mean scale) caused by increased winter survival (\(\text{logit}(p_\text{surv})\)). The parameters are the linear regression slope and intercept. Point estimates and 95\% confidence intervals (CI) are estimated from the median and quantiles of the posterior distribution.}\tabularnewline
 \toprule
 Garden & Parameter & Median (95\% CI) \\
 \midrule
@@ -264,15 +287,15 @@ Garden & Parameter & Median (95\% CI) \\
 Garden & Parameter & Median (95\% CI) \\
 \midrule
 \endhead
-North & intercept & 4.06 (3.09 -- 5.26) \\
-North & slope & -0.456 (-0.629 -- -0.324) \\
-South & intercept & 4.9 (3.84 -- 6.08) \\
-South & slope & -0.355 (-0.53 -- -0.225) \\
+North & intercept & \(4.01~(2.97,~5.51)\) \\
+North & slope & \(-0.444~(-0.675,~-0.304)\) \\
+South & intercept & \(4.82~(3.73,~6.24)\) \\
+South & slope & \(-0.344~(-0.556,~-0.208)\) \\
 \bottomrule
 \end{longtable}
 
 \begin{longtable}[]{@{}lll@{}}
-\caption{\label{tab:df_ind_lm} Genotypic directional selection coefficient estimates and confidence intervals. In both North and South gardens, we estimated selection on increased germination rate (log-mean scale) caused by increased winter survival (\(\text{logit}(p_\text{surv})\)). The parameters are the linear regression slope and intercept. Point estimates and 95\% confidence intervals (CI) are estimated from the median and quantiles of the posterior distribution.}\tabularnewline
+\caption{\label{tab:df_ind_lm} Genotypic directional selection coefficient estimates and confidence intervals. In both North and South gardens, we estimated selection on time to germination (log-mean scale) caused by increased winter survival (\(\text{logit}(p_\text{surv})\)). The parameters are the linear regression slope and intercept. Point estimates and 95\% confidence intervals (CI) are estimated from the median and quantiles of the posterior distribution.}\tabularnewline
 \toprule
 Garden & Parameter & Median (95\% CI) \\
 \midrule
@@ -281,10 +304,10 @@ Garden & Parameter & Median (95\% CI) \\
 Garden & Parameter & Median (95\% CI) \\
 \midrule
 \endhead
-North & intercept & -0.0022 (-0.034 -- 0.0273) \\
-North & slope & -0.131 (-0.371 -- 0.0122) \\
-South & intercept & 0.000691 (-0.0176 -- 0.0266) \\
-South & slope & -0.00177 (-0.14 -- 0.13) \\
+North & intercept & \(-0.00151~(-0.0345,~0.0255)\) \\
+North & slope & \(-0.08~(-0.27,~0.0243)\) \\
+South & intercept & \(0.00059~(-0.0156,~0.0244)\) \\
+South & slope & \(-0.000876~(-0.11,~0.1)\) \\
 \bottomrule
 \end{longtable}
 

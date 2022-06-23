@@ -40,7 +40,49 @@ df_ind <- df %>%
                             .interval = tidybayes::qi)
   
 df_pop %<>% dplyr::mutate(DaysToGerm = 4 + exp(bPop_germ))
-  
+
+# Connecting letters
+df <- fit_germ$draws(dplyr::all_of(pars_pop)) |>
+  posterior::as_draws_df()
+
+bPop <- df |>
+  tidyr::pivot_longer(
+    cols = tidyr::starts_with("bPop_germ"),
+    names_to = "pop1",
+    values_to = "value1"
+  )
+
+# This code produces info for connecting letters. Uncomment and run.
+# bPop |>
+#   dplyr::select(tidyr::starts_with(".")) |>
+#   dplyr::distinct() |>
+#   tidyr::crossing(pop1 = pars_pop, pop2 = pars_pop) |>
+#   dplyr::left_join(bPop) |>
+#   dplyr::left_join(dplyr::rename(bPop, pop2 = pop1, value2 = value1)) |>
+#   dplyr::mutate(
+#     n1 = as.numeric(stringr::str_extract(pop1, "[1-5]{1}")),
+#     n2 = as.numeric(stringr::str_extract(pop2, "[1-5]{1}"))
+#   ) |>
+#   dplyr::filter(n1 < n2) |>
+#   dplyr::mutate(
+#     pop1 = pop_levels()[n1],
+#     pop2 = pop_levels()[n2]
+#   ) |>
+#   tidyr::unite(comparison, pop1, pop2, sep = "-") |>
+#   dplyr::mutate(diff_bPop = value1 - value2) |>
+#   dplyr::group_by(comparison) |>
+#   ggdist::point_interval(diff_bPop, .point = median, .interval = tidybayes::qi) |>
+#   dplyr::mutate(sig_diff = sign(.lower) == sign(.upper))
+
+df_letters <- data.frame(
+  pop = pop_levels(),
+  letter = c("a", "a", "a", "b", "c"),
+  DaysToGerm = df_pop |>
+    dplyr::group_by(pop) |>
+    dplyr::summarise(.x = max(DaysToGerm) + 0.75) |>
+    dplyr::pull(.x)
+)
+
 mean_germ <- ggplot(df_pop, aes(pop, DaysToGerm, fill = pop)) +
   geom_violin(trim = FALSE, scale = "width", adjust = 2, draw_quantiles = 0.5,
               show.legend = FALSE) +
@@ -51,13 +93,13 @@ mean_germ <- ggplot(df_pop, aes(pop, DaysToGerm, fill = pop)) +
   #              fill = "grey50") +
   geom_point(data = df_ind, position = position_jitter(width = 0.1, height = 0),
              show.legend = FALSE) + 
+  geom_text(data = df_letters, aes(label = letter)) +
   scale_x_discrete(
     labels = pop_levels() %>% sapply(get_labels) %>% sapply(place_line_break)
   ) +
   scale_fill_manual(values = palette()) +
-  xlab("Population") +
+  xlab("Source Population") +
   ylab("Days to Germination") +
-  theme_bw() +
   theme(
     axis.text.x = element_text(size = 12, angle = 30, vjust = 0.75),
     axis.text = element_text(size = 12),
@@ -68,5 +110,3 @@ mean_germ <- ggplot(df_pop, aes(pop, DaysToGerm, fill = pop)) +
   )
 
 readr::write_rds(mean_germ, "r/objects/mean_germ.rds")
-
-# ggsave("ms/figures/mean-germ.pdf", width = 5, height = 5, units = "in")

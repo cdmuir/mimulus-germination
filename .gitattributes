@@ -1,6 +1,10 @@
 *.rds filter=lfs diff=lfs merge=lfs -text 
-stan/lognormal_0.stan filter=lfs diff=lfs merge=lfs -text 
-r/objects/lognormal_0.rds filter=lfs diff=lfs merge=lfs -text 
-stan/lognormal_1.stan filter=lfs diff=lfs merge=lfs -text 
-r/objects/lognormal_1.rds filter=lfs diff=lfs merge=lfs -text 
-r/objects/fit.rds filter=lfs diff=lfs merge=lfs -text
+stan/lognormal_0_0.stan filter=lfs diff=lfs merge=lfs -text 
+r/objects/lognormal_0_0.rds filter=lfs diff=lfs merge=lfs -text 
+stan/lognormal_0_1.stan filter=lfs diff=lfs merge=lfs -text 
+r/objects/lognormal_0_1.rds filter=lfs diff=lfs merge=lfs -text 
+stan/lognormal_1_0.stan filter=lfs diff=lfs merge=lfs -text 
+r/objects/lognormal_1_0.rds filter=lfs diff=lfs merge=lfs -text 
+stan/lognormal_1_1.stan filter=lfs diff=lfs merge=lfs -text 
+r/objects/lognormal_1_1.rds filter=lfs diff=lfs merge=lfs -text 
+r/objects/fit.rds filter=lfs diff=lfs merge=lfs -text 

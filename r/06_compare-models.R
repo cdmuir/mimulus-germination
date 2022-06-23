@@ -3,7 +3,7 @@ source("r/header.r")
 # Extract likelihoods ----
 models = list.files(
   path = "r/objects", 
-  pattern = "^lognormal_[01]{1}.rds"
+  pattern = "^lognormal_[01]{1}_1.rds"
 ) %>%
   stringr::str_c("r/objects/", .)
 
@@ -15,7 +15,7 @@ likelihoods = models %>%
   }, mc.cores = min(c(parallel::detectCores(), length(.)))) %>%
   parallel::mclapply(function(.x) {.x$draws("log_lik_germ")},
                      mc.cores = min(c(parallel::detectCores(), length(.))))
-  
+
 r_eff = likelihoods %>%
   purrr::map(~ {
     .x = exp(posterior::as_draws_array(.x))
@@ -33,7 +33,7 @@ loo_table_germ = purrr::map2(likelihoods, r_eff, ~ {
   as.data.frame() %>%
   tibble::rownames_to_column("model") %>%
   dplyr::mutate(
-    preferred_model = model == "r/objects/lognormal_0.rds",
+    preferred_model = model == "r/objects/lognormal_0_1.rds",
     signif_diff = (abs(elpd_diff) > 2 * se_diff)
   )
 
@@ -52,7 +52,7 @@ likelihoods = models %>%
   parallel::mclapply(function(.x) {.x$draws("log_lik_surv")},
                      mc.cores = min(c(parallel::detectCores(), length(.))))
 
- r_eff = likelihoods %>%
+r_eff = likelihoods %>%
   purrr::map(~ {
     .x = exp(posterior::as_draws_array(.x))
     loo::relative_eff(.x, cores = parallel::detectCores())
@@ -69,7 +69,7 @@ loo_table_surv = purrr::map2(likelihoods, r_eff, ~ {
   as.data.frame() %>%
   tibble::rownames_to_column("model") %>%
   dplyr::mutate(
-    preferred_model = model == "r/objects/lognormal_0.rds",
+    preferred_model = model == "r/objects/lognormal_0_1.rds",
     signif_diff = (abs(elpd_diff) > 2 * se_diff)
   )
 
@@ -82,6 +82,6 @@ best_model = ifelse(
 # Both analyses agree there is no evidence for population-specific genetic
 # variance components. 
 
-file.copy("r/objects/lognormal_0.rds", "r/objects/fit.rds", overwrite = TRUE)
+file.copy("r/objects/lognormal_0_1.rds", "r/objects/fit.rds", overwrite = TRUE)
 cat("r/objects/fit.rds filter=lfs diff=lfs merge=lfs -text\n",
     file = ".gitattributes", append = TRUE)
