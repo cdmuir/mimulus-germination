@@ -1,5 +1,5 @@
 ---
-title: 'Supporting Information'
+title: 'Muir et al.—American Journal of Botany 2022—Appendix S1'
 output:
   bookdown::pdf_document2:
     includes:
@@ -84,7 +84,7 @@ knitr::kable(vc_table_surv, format = "markdown", caption = "\\label{tab:vc_table
 \clearpage
 
 ```{r df_pop_lm, eval=TRUE, echo=FALSE}
-knitr::kable(df_pop_lm, format = "markdown", caption = "\\label{tab:df_pop_lm} Between-population directional selection coefficient estimates and confidence intervals. In both North and South gardens, we estimated selection on time to germination (log-mean scale) caused by increased winter survival ($\\text{logit}(p_\\text{surv})$). The parameters are the linear regression slope and intercept. Point estimates and 95\\% confidence intervals (CI) are estimated from the median and quantiles of the posterior distribution.", label = NA)
+knitr::kable(df_pop_lm, format = "markdown", caption = "\\label{tab:df_pop_lm} Among-population directional selection coefficient estimates and confidence intervals. In both North and South gardens, we estimated selection on time to germination (log-mean scale) caused by increased winter survival ($\\text{logit}(p_\\text{surv})$). The parameters are the linear regression slope and intercept. Point estimates and 95\\% confidence intervals (CI) are estimated from the median and quantiles of the posterior distribution.", label = NA)
 ```
 
 ```{r df_ind_lm, eval=TRUE, echo=FALSE}

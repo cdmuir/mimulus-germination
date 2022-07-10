@@ -1,0 +1,93 @@
+---
+output:
+  bookdown::pdf_document2:
+    includes:
+      before_body: ../template/doc_prefix.tex
+      in_header: ../template/preamble.tex
+    keep_tex: yes
+    latex_engine: xelatex
+    number_sections: no
+    toc: no
+  bookdown::html_document2:
+    number_sections: no
+    theme: readable
+    toc: yes
+  bookdown::tufte_html2:
+    number_sections: no
+    toc: yes
+  bookdown::word_document2: null
+fontsize: 12pt
+linestretch: 1.5
+link-citations: yes
+csl: ../template/american-journal-of-botany.csl
+bibliography: ../ms/mimulus-germination.bib
+---
+
+```{r setup, include=FALSE}
+
+knitr::opts_knit$set(root.dir = "..")
+knitr::opts_chunk$set(message = FALSE, warning = FALSE)
+
+```
+
+```{r preamble, include = FALSE}
+
+source("r/header.R")
+import2ms()
+
+# Additional packages
+library(dplyr)
+library(glue)
+library(magrittr)
+library(posterior)
+library(readr)
+library(stringr)
+library(tibble)
+
+fit <- read_rds("r/objects/fit.rds")
+
+# estimate and CI of change in log-mean days to germination
+germ_north_diff <- fit$draws("bCohortNorth_germ") |>
+  posterior::as_draws_df() |>
+  ggdist::point_interval(.point = median, .interval = tidybayes::qi) |>
+  dplyr::mutate(dplyr::across(where(is.numeric), round, digits = 3)) |>
+  dplyr::mutate(median_qi = glue::glue("${bCohortNorth_germ}~({.lower}, {.upper})$")) |>
+  dplyr::pull(median_qi)
+
+```
+
+# Tables
+
+```{r, focal_pops, echo=FALSE, eval=TRUE}
+
+tribble(
+  ~`Source population`, ~Latitude, ~Longitude, ~`Elevation (mas)`,
+  "Sweetwater River", "$32.900$", "$-116.585$", "$1180$",
+  "West Fork Mojave River", "$34.284$", "$-117.378$", "$1120$",
+  "North Fork Middle Tule River", "$36.201$", "$-118.759$", "$926$",
+  "Little Jamison Creek", "$39.743$", "$-120.704$", "$1603$",
+  "Rock Creek", "$43.374$", "$-122.957$", "$326$"
+) |>
+  knitr::kable(format = "markdown", caption = "\\label{tab:focal_pops} Source populations, including the name of the drainage where the seeds were collected, the latitude, longitude, and elevation in meters above sea level (mas).", align = "lccc", label = NA)
+```
+
+# Figure captions
+
+\begin{figure} [ht]
+  \caption{Germination rate and survival differ among source populations of \textit{Mimulus cardinalis}. Source populations are arrayed along the $x$-axis by latitude of origin from south to north. In both panels, the violins represent the posterior distribution of the population trait value and the bars are the median. Each black point is the median trait value for one of the individuals in the base population. Connecting letters above violins indicate populations that significantly different or not. The 95\% confidence interval for difference among populations includes 0 for those with the same letter. a. The northernmost populations germinate days later than southern populations in the same greenhouse environment. b. In both South (solid linetype around violin) and North (dashed linetype around violin) gardens, source populations originating from the south had higher probability of winter survival than northern source populations. However, the overall survival was greater in the South garden, such that even the northernmost source population (Rock Creek) had higher survival in the South than in the North garden.}
+\end{figure}
+
+\begin{figure}[ht]
+  \caption{Estimated variance components and heritability of germination rate in units of log(days)$^2$. a. The variance in germination rate among source populations $V_\text{pop}$ is comparable to the genetic variation within populations $V_G$. The variance among Blocks and maternal parent ($V_M$) in the greenhouse is substantially lower whereas the unexplained environmental variance is higher $V_E$. b. This results a moderate heritability $H^2$ which is $V_G / V_P$. The point estimates are the median of the posterior distribution; thick lines are $80$\% confidence intervals; and thin lines are the $95$\% confidence intervals.}
+  \label{fig:h2-germ}
+\end{figure}
+
+\begin{figure}[ht]
+  \caption{Estimated variance components and heritability of winter survival in units of $p^2_\text{surv}$. The top row of facets are estimates from the North garden; the bottom row of facets are estimates from the South garden. On the $x$-axis, the source populations are arranged from left (orange) to right (blue) by latitude going from south to north. The right-most facet ($V_\text{pop}$ is grey because it is the variance among populations. On the $y$-axis (log$_{10}$-transformed for visual clarity) is the variance or heritability ($H^2$) depending on the facet. In both gardens, the unexplained environmental ($V_E$) is higher than the variance contributed by field Block, genetic variance ($V_E$), or variance among source populations ($V_\text{pop}$). Hence, the $H^2$ is very low in both gardens. The point estimates are the median of the posterior distribution; thick lines are $80$\% confidence intervals; and thin lines are the $95$\% confidence intervals.}
+  \label{fig:h2-surv}
+\end{figure}
+
+\begin{figure}[ht]
+  \caption{Directional selection favor faster germination among but not within source populations. In both South (grey ribbon) and North (white ribbon) gardens, source populations that germinated faster ($x$-axis) also had higher winter survival ($y$-axis). The larger solid points are the population average estimated from the median of the posterior distribution; smaller translucent points are the genotypic mean trait values within populations. The solid line is regression between germination rate and winter survival among populations estimated from the median of the posterior distribution; the genotypic regression results are not shown in this figure. The ribbon within the thinner black lines is the $95$\% confidence interval of the regression.}
+  \label{fig:selection}
+\end{figure}

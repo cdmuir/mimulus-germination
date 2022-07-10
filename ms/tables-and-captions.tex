@@ -1,0 +1,201 @@
+% Options for packages loaded elsewhere
+\PassOptionsToPackage{unicode}{hyperref}
+\PassOptionsToPackage{hyphens}{url}
+%
+\documentclass[
+  12pt,
+]{article}
+\usepackage{amsmath,amssymb}
+\usepackage{lmodern}
+\usepackage{setspace}
+\usepackage{iftex}
+\ifPDFTeX
+  \usepackage[T1]{fontenc}
+  \usepackage[utf8]{inputenc}
+  \usepackage{textcomp} % provide euro and other symbols
+\else % if luatex or xetex
+  \usepackage{unicode-math}
+  \defaultfontfeatures{Scale=MatchLowercase}
+  \defaultfontfeatures[\rmfamily]{Ligatures=TeX,Scale=1}
+\fi
+% Use upquote if available, for straight quotes in verbatim environments
+\IfFileExists{upquote.sty}{\usepackage{upquote}}{}
+\IfFileExists{microtype.sty}{% use microtype if available
+  \usepackage[]{microtype}
+  \UseMicrotypeSet[protrusion]{basicmath} % disable protrusion for tt fonts
+}{}
+\makeatletter
+\@ifundefined{KOMAClassName}{% if non-KOMA class
+  \IfFileExists{parskip.sty}{%
+    \usepackage{parskip}
+  }{% else
+    \setlength{\parindent}{0pt}
+    \setlength{\parskip}{6pt plus 2pt minus 1pt}}
+}{% if KOMA class
+  \KOMAoptions{parskip=half}}
+\makeatother
+\usepackage{xcolor}
+\IfFileExists{xurl.sty}{\usepackage{xurl}}{} % add URL line breaks if available
+\IfFileExists{bookmark.sty}{\usepackage{bookmark}}{\usepackage{hyperref}}
+\hypersetup{
+  hidelinks,
+  pdfcreator={LaTeX via pandoc}}
+\urlstyle{same} % disable monospaced font for URLs
+\usepackage[margin=1in]{geometry}
+\usepackage{longtable,booktabs,array}
+\usepackage{calc} % for calculating minipage widths
+% Correct order of tables after \paragraph or \subparagraph
+\usepackage{etoolbox}
+\makeatletter
+\patchcmd\longtable{\par}{\if@noskipsec\mbox{}\fi\par}{}{}
+\makeatother
+% Allow footnotes in longtable head/foot
+\IfFileExists{footnotehyper.sty}{\usepackage{footnotehyper}}{\usepackage{footnote}}
+\makesavenoteenv{longtable}
+\usepackage{graphicx}
+\makeatletter
+\def\maxwidth{\ifdim\Gin@nat@width>\linewidth\linewidth\else\Gin@nat@width\fi}
+\def\maxheight{\ifdim\Gin@nat@height>\textheight\textheight\else\Gin@nat@height\fi}
+\makeatother
+% Scale images if necessary, so that they will not overflow the page
+% margins by default, and it is still possible to overwrite the defaults
+% using explicit options in \includegraphics[width, height, ...]{}
+\setkeys{Gin}{width=\maxwidth,height=\maxheight,keepaspectratio}
+% Set default figure placement to htbp
+\makeatletter
+\def\fps@figure{htbp}
+\makeatother
+\setlength{\emergencystretch}{3em} % prevent overfull lines
+\providecommand{\tightlist}{%
+  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+\setcounter{secnumdepth}{-\maxdimen} % remove section numbering
+\usepackage{geometry}
+\geometry{verbose,letterpaper,margin=2.45cm}
+
+% \usepackage[breaklinks=true,pdfstartview=FitH,citecolor=blue]{hyperref}
+\hypersetup{colorlinks,%
+	citecolor=blue,%
+	filecolor=red,%
+	linkcolor=blue,%
+	urlcolor=red,%
+	pdfstartview=FitH}
+
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage{textgreek}
+\usepackage[greek,english]{babel}
+\usepackage{microtype}
+\usepackage{amsmath}
+\usepackage[osf]{libertine}
+\usepackage{libertinust1math}
+\usepackage{inconsolata}
+\usepackage{caption} % to remove figure label with \captionsetup{}
+
+\usepackage{booktabs}
+
+\usepackage{setspace}
+% \doublespacing
+
+% \setstretch{1.8999999999999999}
+
+\usepackage{lineno}
+\linenumbers % toggle on for linenumbers
+
+\usepackage{lscape}
+\newcommand{\blandscape}{\begin{landscape}}
+\newcommand{\elandscape}{\end{landscape}}
+
+% \renewcommand{\rmdefault}{cmr}
+
+
+% flush left while keep identation
+\makeatletter
+\newcommand\iraggedright{%
+  \let\\\@centercr\@rightskip\@flushglue \rightskip\@rightskip
+  \leftskip\z@skip}
+\makeatother
+
+% make pdf as default figure format
+\DeclareGraphicsExtensions{.pdf,.png, %
+    .jpg,.mps,.jpeg,.jbig2,.jb2,.JPG,.JPEG,.JBIG2,.JB2}
+    
+\ifLuaTeX
+  \usepackage{selnolig}  % disable illegal ligatures
+\fi
+
+\author{}
+\date{\vspace{-2.5em}}
+
+\begin{document}
+
+% align only at left, not at right.
+\iraggedright
+
+% Package command for citing R packages
+\newcommand{\pkg}[1]{{\fontseries{b}\selectfont #1}} 
+
+\setstretch{1.5}
+\hypertarget{tables}{%
+\section{Tables}\label{tables}}
+
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 6\tabcolsep) * \real{0.4265}}
+  >{\centering\arraybackslash}p{(\columnwidth - 6\tabcolsep) * \real{0.1471}}
+  >{\centering\arraybackslash}p{(\columnwidth - 6\tabcolsep) * \real{0.1765}}
+  >{\centering\arraybackslash}p{(\columnwidth - 6\tabcolsep) * \real{0.2500}}@{}}
+\caption{\label{tab:focal_pops} Source populations, including the name of the drainage where the seeds were collected, the latitude, longitude, and elevation in meters above sea level (mas).}\tabularnewline
+\toprule
+\begin{minipage}[b]{\linewidth}\raggedright
+Source population
+\end{minipage} & \begin{minipage}[b]{\linewidth}\centering
+Latitude
+\end{minipage} & \begin{minipage}[b]{\linewidth}\centering
+Longitude
+\end{minipage} & \begin{minipage}[b]{\linewidth}\centering
+Elevation (mas)
+\end{minipage} \\
+\midrule
+\endfirsthead
+\toprule
+\begin{minipage}[b]{\linewidth}\raggedright
+Source population
+\end{minipage} & \begin{minipage}[b]{\linewidth}\centering
+Latitude
+\end{minipage} & \begin{minipage}[b]{\linewidth}\centering
+Longitude
+\end{minipage} & \begin{minipage}[b]{\linewidth}\centering
+Elevation (mas)
+\end{minipage} \\
+\midrule
+\endhead
+Sweetwater River & \(32.900\) & \(-116.585\) & \(1180\) \\
+West Fork Mojave River & \(34.284\) & \(-117.378\) & \(1120\) \\
+North Fork Middle Tule River & \(36.201\) & \(-118.759\) & \(926\) \\
+Little Jamison Creek & \(39.743\) & \(-120.704\) & \(1603\) \\
+Rock Creek & \(43.374\) & \(-122.957\) & \(326\) \\
+\bottomrule
+\end{longtable}
+
+\hypertarget{figure-captions}{%
+\section{Figure captions}\label{figure-captions}}
+
+\begin{figure} [ht]
+  \caption{Germination rate and survival differ among source populations of \textit{Mimulus cardinalis}. Source populations are arrayed along the $x$-axis by latitude of origin from south to north. In both panels, the violins represent the posterior distribution of the population trait value and the bars are the median. Each black point is the median trait value for one of the individuals in the base population. Connecting letters above violins indicate populations that significantly different or not. The 95\% confidence interval for difference among populations includes 0 for those with the same letter. a. The northernmost populations germinate days later than southern populations in the same greenhouse environment. b. In both South (solid linetype around violin) and North (dashed linetype around violin) gardens, source populations originating from the south had higher probability of winter survival than northern source populations. However, the overall survival was greater in the South garden, such that even the northernmost source population (Rock Creek) had higher survival in the South than in the North garden.}
+\end{figure}
+
+\begin{figure}[ht]
+  \caption{Estimated variance components and heritability of germination rate in units of log(days)$^2$. a. The variance in germination rate among source populations $V_\text{pop}$ is comparable to the genetic variation within populations $V_G$. The variance among Blocks and maternal parent ($V_M$) in the greenhouse is substantially lower whereas the unexplained environmental variance is higher $V_E$. b. This results a moderate heritability $H^2$ which is $V_G / V_P$. The point estimates are the median of the posterior distribution; thick lines are $80$\% confidence intervals; and thin lines are the $95$\% confidence intervals.}
+  \label{fig:h2-germ}
+\end{figure}
+
+\begin{figure}[ht]
+  \caption{Estimated variance components and heritability of winter survival in units of $p^2_\text{surv}$. The top row of facets are estimates from the North garden; the bottom row of facets are estimates from the South garden. On the $x$-axis, the source populations are arranged from left (orange) to right (blue) by latitude going from south to north. The right-most facet ($V_\text{pop}$ is grey because it is the variance among populations. On the $y$-axis (log$_{10}$-transformed for visual clarity) is the variance or heritability ($H^2$) depending on the facet. In both gardens, the unexplained environmental ($V_E$) is higher than the variance contributed by field Block, genetic variance ($V_E$), or variance among source populations ($V_\text{pop}$). Hence, the $H^2$ is very low in both gardens. The point estimates are the median of the posterior distribution; thick lines are $80$\% confidence intervals; and thin lines are the $95$\% confidence intervals.}
+  \label{fig:h2-surv}
+\end{figure}
+
+\begin{figure}[ht]
+  \caption{Directional selection favor faster germination among but not within source populations. In both South (grey ribbon) and North (white ribbon) gardens, source populations that germinated faster ($x$-axis) also had higher winter survival ($y$-axis). The larger solid points are the population average estimated from the median of the posterior distribution; smaller translucent points are the genotypic mean trait values within populations. The solid line is regression between germination rate and winter survival among populations estimated from the median of the posterior distribution; the genotypic regression results are not shown in this figure. The ribbon within the thinner black lines is the $95$\% confidence interval of the regression.}
+  \label{fig:selection}
+\end{figure}
+
+\end{document}

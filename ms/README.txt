@@ -1,0 +1,12 @@
+Variable name	              Description
+population	                Source population (CUR = Sweetwater River; WFM = West Fork Mojave River; NMT = North Fork Middle Tule River; LIJ = Little Jamison Creek; RCK = Rock Creek)
+dam	                        Ovule parent (<population><##>)
+sire	                      Pollen parent (<population><##>)
+cohort	                    Seed cohort ('north' or 'south')
+block_germination	          Block in greenhouse (<cohort>_<A-T> or <cohort>_zSUB<1-4>)
+date_sow	                  Date that seeds were sown in greenhouse (YYYY-MM-DD)
+date_germination	          Date that cotyledons visibly emerged from soil (YYYY-MM-DD)
+time_to_germination_days    Days to germination (date_germination - date_sow)
+block_garden	              Block in garden (<cohort>_<A-T>)
+initial_size_mm	            Initial size in garden (length of longest leaf in mm)
+winter_survival_boolean	    Did individual survice winter in garden (TRUE or FALSE)

@@ -86,9 +86,15 @@ ms/figures/climate.pdf: raw-data/climate_data.csv r/functions.R r/header.R r/14_
 ms/figures/range-map.pdf: r/functions.R r/header.R r/15_plot-range-map.R
 	Rscript -e 'source("r/15_plot-range-map.R")'
 
+# 16_archive-data.R ----
+ms/muir-etal-2022.txt: r/header.R processed-data/germination.rds r/16_archive-data.R
+	Rscript -e 'source("r/16_archive-data.R")'
+
 # paper ----
 ms/ms.pdf: ms/ms.Rmd ms/mimulus-germination.bib ms/export/data.rds ms/export/df_ind_lm.rds ms/export/df_pop_lm.rds ms/export/diff_vpop_vg_germ.rds ms/export/nRemove.rds ms/export/vc_table_germ.rds ms/export/vc_table_surv.rds ms/export/diff_vpop_vg_germ.rds ms/figures/climate.pdf ms/figures/h2-germ.pdf ms/figures/h2-surv.pdf ms/figures/mean-traits.pdf ms/figures/pp_check_germ.pdf ms/figures/range-map.pdf ms/figures/selection.pdf
 	Rscript -e 'rmarkdown::render("ms/ms.Rmd", output_format = "bookdown::pdf_document2", output_file = "ms.pdf")'
+ms/tables-and-captions.pdf: ms/ms.Rmd ms/tables-and-captions.Rmd ms/mimulus-germination.bib ms/export/data.rds ms/export/df_ind_lm.rds ms/export/df_pop_lm.rds ms/export/diff_vpop_vg_germ.rds ms/export/nRemove.rds ms/export/vc_table_germ.rds ms/export/vc_table_surv.rds ms/export/diff_vpop_vg_germ.rds ms/figures/climate.pdf ms/figures/h2-germ.pdf ms/figures/h2-surv.pdf ms/figures/mean-traits.pdf ms/figures/pp_check_germ.pdf ms/figures/range-map.pdf ms/figures/selection.pdf
+	Rscript -e 'rmarkdown::render("ms/tables-and-captions.Rmd", output_format = "bookdown::pdf_document2", output_file = "tables-and-captions.pdf")'
 ms/si.pdf: ms/si.Rmd ms/mimulus-germination.bib ms/export/data.rds ms/export/df_ind_lm.rds ms/export/df_pop_lm.rds ms/export/diff_vpop_vg_germ.rds ms/export/nRemove.rds ms/export/vc_table_germ.rds ms/export/vc_table_surv.rds ms/export/diff_vpop_vg_germ.rds ms/figures/climate.pdf ms/figures/h2-germ.pdf ms/figures/h2-surv.pdf ms/figures/mean-traits.pdf ms/figures/pp_check_germ.pdf ms/figures/range-map.pdf ms/figures/selection.pdf
 	Rscript -e 'rmarkdown::render("ms/si.Rmd", output_format = "bookdown::pdf_document2", output_file = "si.pdf")'
 

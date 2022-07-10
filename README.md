@@ -2,7 +2,7 @@
 
 This repository contains source code associated with the manuscript:
 
-[Selection on early survival does not explain germination rate clines in *Mimulus cardinalis* (Phrymaceae)](https://doi.org/10.1101/2021.12.XX.XXXXXX). *bioRxiv*.
+[Selection on early survival does not explain germination rate clines in *Mimulus cardinalis*](https://doi.org/10.1002/ajb2.XXXXX). Accepted at *American Journal of Botany*.
 
 This project was developed by [Chris Muir](https://cdmuir.netlify.app) and [Amy Angert](https://www.botany.ubc.ca/people/amy-angert/). [Courtney Van Den Elzen](https://www.colorado.edu/lab/emery/courtney-van-den-elzen) helped with data collection.
 
@@ -53,7 +53,7 @@ At minimum, you will need [R](https://cran.r-project.org/) installed on your mac
 
 ### Rendering manuscript with pre-saved outout
 
-Knit `ms/ms.Rmd` and `ms/si.Rmd` using [RStudio](https://www.rstudio.com/).
+Knit `ms/ms.Rmd`, `ms/tables-andcaptions.Rmd`, and `ms/si.Rmd` using [RStudio](https://www.rstudio.com/).
 
 You can also run the following code from the R console:
 
