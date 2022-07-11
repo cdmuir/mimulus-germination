@@ -1,5 +1,13 @@
 ---
 output:
+  bookdown::word_document2: null
+  bookdown::html_document2:
+    number_sections: no
+    theme: readable
+    toc: yes
+  bookdown::tufte_html2:
+    number_sections: no
+    toc: yes
   bookdown::pdf_document2:
     includes:
       before_body: ../template/doc_prefix.tex
@@ -8,14 +16,6 @@ output:
     latex_engine: xelatex
     number_sections: no
     toc: no
-  bookdown::html_document2:
-    number_sections: no
-    theme: readable
-    toc: yes
-  bookdown::tufte_html2:
-    number_sections: no
-    toc: yes
-  bookdown::word_document2: null
 fontsize: 12pt
 linestretch: 1.5
 link-citations: yes
@@ -71,7 +71,7 @@ tribble(
   knitr::kable(format = "markdown", caption = "\\label{tab:focal_pops} Source populations, including the name of the drainage where the seeds were collected, the latitude, longitude, and elevation in meters above sea level (mas).", align = "lccc", label = NA)
 ```
 
-# Figure captions
+# Figure legends
 
 \begin{figure} [ht]
   \caption{Germination rate and survival differ among source populations of \textit{Mimulus cardinalis}. Source populations are arrayed along the $x$-axis by latitude of origin from south to north. In both panels, the violins represent the posterior distribution of the population trait value and the bars are the median. Each black point is the median trait value for one of the individuals in the base population. Connecting letters above violins indicate populations that significantly different or not. The 95\% confidence interval for difference among populations includes 0 for those with the same letter. a. The northernmost populations germinate days later than southern populations in the same greenhouse environment. b. In both South (solid linetype around violin) and North (dashed linetype around violin) gardens, source populations originating from the south had higher probability of winter survival than northern source populations. However, the overall survival was greater in the South garden, such that even the northernmost source population (Rock Creek) had higher survival in the South than in the North garden.}
@@ -83,7 +83,7 @@ tribble(
 \end{figure}
 
 \begin{figure}[ht]
-  \caption{Estimated variance components and heritability of winter survival in units of $p^2_\text{surv}$. The top row of facets are estimates from the North garden; the bottom row of facets are estimates from the South garden. On the $x$-axis, the source populations are arranged from left (orange) to right (blue) by latitude going from south to north. The right-most facet ($V_\text{pop}$ is grey because it is the variance among populations. On the $y$-axis (log$_{10}$-transformed for visual clarity) is the variance or heritability ($H^2$) depending on the facet. In both gardens, the unexplained environmental ($V_E$) is higher than the variance contributed by field Block, genetic variance ($V_E$), or variance among source populations ($V_\text{pop}$). Hence, the $H^2$ is very low in both gardens. The point estimates are the median of the posterior distribution; thick lines are $80$\% confidence intervals; and thin lines are the $95$\% confidence intervals.}
+  \caption{Estimated variance components and heritability of winter survival in units of $p^2_\text{surv}$. The top row of facets are estimates from the North garden; the bottom row of facets are estimates from the South garden. On the $x$-axis, the source populations are arranged from left (orange) to right (blue) by latitude going from south to north. The right-most facet ($V_\text{pop}$) is grey because it is the variance among populations. On the $y$-axis (log$_{10}$-transformed for visual clarity) is the variance or heritability ($H^2$) depending on the facet. In both gardens, the unexplained environmental ($V_E$) is higher than the variance contributed by field Block, genetic variance ($V_E$), or variance among source populations ($V_\text{pop}$). Hence, the $H^2$ is very low in both gardens. The point estimates are the median of the posterior distribution; thick lines are $80$\% confidence intervals; and thin lines are the $95$\% confidence intervals.}
   \label{fig:h2-surv}
 \end{figure}
 

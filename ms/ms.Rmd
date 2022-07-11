@@ -2,6 +2,14 @@
 title: 'Selection on early survival does not explain germination rate clines in *Mimulus cardinalis*'
 author: "Christopher D. Muir$^{1,2,*}$, Courtney L. Van Den Elzen$^{1,3}$, Amy L. Angert$^{1,4}$"
 output:
+  bookdown::word_document2: null
+  bookdown::html_document2:
+    number_sections: no
+    theme: readable
+    toc: yes
+  bookdown::tufte_html2:
+    number_sections: no
+    toc: yes
   bookdown::pdf_document2:
     includes:
       before_body: ../template/doc_prefix.tex
@@ -10,14 +18,6 @@ output:
     latex_engine: xelatex
     number_sections: no
     toc: no
-  bookdown::html_document2:
-    number_sections: no
-    theme: readable
-    toc: yes
-  bookdown::tufte_html2:
-    number_sections: no
-    toc: yes
-  bookdown::word_document2: null
 fontsize: 12pt
 linestretch: 1.5
 link-citations: yes
@@ -290,14 +290,14 @@ Statistical challenges of analyzing non-Gaussian traits may direct research away
 The reciprocal transplant experiment did not support our hypothesis that local adaptation maintains clinal variation in germination rate in *M. cardinalis*. We cannot exclude the possibility that artificial aspects of our experimental design may have prevented us from measuring selection on germination rate realistically or that selection operates via different components of fitness. It is also possible that climate anomalies during our experiment prevented us from observing historical patterns of selection that led to present-day phenotypic variation. It is plausible that the cline in germination rate and other phenotypes may be caused by nonadaptive forces that increase the frequency of deleterious alleles during range expansion. Studies like ours that combine clines with reciprocal transplants are necessary to determine what evolutionary forces shape range-wide phenotypic variation within species.
 
 # Acknowledgements
-Roger Wynn, Gail Wynn, Christina Schneider, and Norbert Schneider provided land for the gardens. Matthew Bayly, Emily Gercke, Kevin Muir, Rachel Muir, Erin Warkman, and Adam Wilkinson helped with data collection or transplanting. Seema Sheth provided seeds and gave feedback on an earlier draft of the manuscript. Lila Fishman and Kelsey Byers provided suggestions on the non-adaptive cline literature. Stephen Weller and two anonymous provided helpful feedback on an earlier version of this manuscript.
+Roger Wynn, Gail Wynn, Christina Schneider, and Norbert Schneider provided land for the gardens. Matthew Bayly, Emily Gercke, Kevin Muir, Rachel Muir, Erin Warkman, and Adam Wilkinson helped with data collection or transplanting. Seema Sheth provided seeds and gave feedback on an earlier draft of the manuscript. Lila Fishman and Kelsey Byers provided suggestions on the non-adaptive cline literature. Stephen Weller and two anonymous reviewers provided helpful feedback on an earlier version of this manuscript.
 
 # Author Contributions
 CDM and ALA designed the experiment. CDM and CLV collected germination data. CDM and ALA collected data on survival in the field. CDM analyzed the data and wrote the manuscript with input from ALA and CLV.
 
 # Data Availability Statement
 
-Data are available on Dryad [URL TBA]. Source code for all analyses is archived on Zenodo [URL TBA]. A repository with data and code is available on GitHub [https://github.com/cdmuir/mimulus-germination](https://github.com/cdmuir/mimulus-germination).
+Data are available on Dryad at [https://doi.org/10.5061/dryad.18931zd0t](https://doi.org/10.5061/dryad.18931zd0t). Source code for all analyses is archived on Zenodo at [https://doi.org/10.5281/zenodo.6814728](https://doi.org/10.5281/zenodo.6814728). A repository with data and code is available on GitHub [https://github.com/cdmuir/mimulus-germination](https://github.com/cdmuir/mimulus-germination).
 
 # Supporting Information
 
